@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario Bros Gaming Hub - SENA</title>
+    <!-- Estilos CSS locales -->
+    <link rel="stylesheet" href="/css/estilos.css">
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Video de Fondo -->
+    <video autoplay loop muted playsinline id="videoFondo">
+        <source src="/video/Fondo Mario.mp4" type="video/mp4">
+    </video>
+
+    <!-- Capa Oscura Transparente -->
+    <div class="capa-oscura"></div>
+
+    <!-- BOTÓN FLOTANTE DE AUDIO -->
+    <button id="btnMuteFlotante" onclick="mutearVideoFondo()" title="Silenciar/Activar Fondo">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+
+    <!-- HEADER / BANNER -->
+    <header>
+        <section class="contenedor-header">
+            <figure class="logo-titulo">
+                <img src="/img/logo-mario.jpg" alt="Super Mario Logo" class="logo-mario-img">
+                <figcaption class="texto-header">
+                    <h1>SUPER MARIO BROS HUB</h1>
+                    <p class="frase-bienvenida">"Here We Go! El Portal Oficial de Mario Bros"</p>
+                </figcaption>
+            </figure>
+            
+            <aside class="redes-header">
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-twitch"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </aside>
+        </section>
+
+        <!-- Menú de Pestañas -->
+        <nav class="menu-pestañas">
+            <button class="btn-tab activa" onclick="mostrarPestana('pestana-videos', this)"><i class="fas fa-video"></i> VIDEOS</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-musica', this)"><i class="fas fa-music"></i> MÚSICA</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-juego', this)"><i class="fas fa-gamepad"></i> JUGAR</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-recursos', this)"><i class="fas fa-tools"></i> HERRAMIENTAS</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-clases', this)"><i class="fas fa-graduation-cap"></i> ACADEMIA</button>
+        </nav>
+    </header>
+
+    <main class="contenedor-principal">
+        
+        <!-- PESTAÑA 1: VIDEOS -->
+        <section id="pestana-videos" class="contenido-tab activa">
+            <h2 class="titulo-seccion"><i class="fas fa-film"></i> Gameplays y Tráilers Oficiales</h2>
+            <section class="grid-2-columnas">
+                
+                <article class="caja-multimedia tarjeta-efecto">
+                    <h3><i class="fas fa-file-video"></i> Gameplay Local MP4</h3>
+                    <figure class="video-local-caja">
+                        <video controls poster="/img/king kong.jpg">
+                            <source src="/video/video-local.mp4" type="video/mp4">
+                            Tu navegador no soporta el reproductor de video.
+                        </video>
+                    </figure>
+                </article>
+
+                <article class="caja-multimedia tarjeta-efecto">
+                    <h3><i class="fab fa-youtube"></i> Tráiler Oficial de la Película</h3>
+                    <figure class="video-youtube-caja">
+                        <iframe src="https://www.youtube.com/embed/DmCZoiCp5C0" title="Super Mario Bros. La Película - Tráiler Oficial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </figure>
+                </article>
+
+            </section>
+        </section>
+
+        <!-- PESTAÑA 2: MÚSICA -->
+        <section id="pestana-musica" class="contenido-tab">
+            <h2 class="titulo-seccion"><i class="fas fa-headphones"></i> Soundtracks & Audio Gamer</h2>
+            <section class="grid-2-columnas">
+                
+                <!-- Canciones Locales -->
+                <article class="caja-multimedia tarjeta-efecto">
+                    <h3><i class="fas fa-compact-disc"></i> Canciones y Efectos Locales</h3>
+                    <section class="contenedor-playlist">
+                        
+                        <article class="tarjeta-cancion-pro" onclick="reproducirAudio(this)">
+                            <figure class="caratula-cancion">
+                                <img src="/img/6.png" alt="Ground Theme">
+                                <span class="btn-play-overlay"><i class="fas fa-play"></i></span>
+                            </figure>
+                            <figcaption class="detalles-cancion">
+                                <p class="titulo-cancion">Ground Theme (Tema Principal)</p>
+                                <p class="artista-cancion"><i class="fas fa-music"></i> Koji Kondo - Super Mario Bros</p>
+                            </figcaption>
+                            <aside class="onda-audio">
+                                <i class="fas fa-wave-square"></i>
+                            </aside>
+                            <audio src="/audio/Ground Theme.mp3"></audio>
+                        </article>
+
+                        <article class="tarjeta-cancion-pro" onclick="reproducirAudio(this)">
+                            <figure class="caratula-cancion">
+                                <img src="/img/8.png" alt="Underground Theme">
+                                <span class="btn-play-overlay"><i class="fas fa-play"></i></span>
+                            </figure>
+                            <figcaption class="detalles-cancion">
+                                <p class="titulo-cancion">Underground Theme (Subterráneo)</p>
+                                <p class="artista-cancion"><i class="fas fa-dungeon"></i> Koji Kondo - Super Mario Bros</p>
+                            </figcaption>
+                            <aside class="onda-audio">
+                                <i class="fas fa-wave-square"></i>
+                            </aside>
+                            <audio src="/audio/Underground Theme.mp3"></audio>
+                        </article>
+
+                        <article class="tarjeta-cancion-pro" onclick="reproducirAudio(this)">
+                            <figure class="caratula-cancion">
+                                <img src="/img/7.png" alt="Invincibility Theme">
+                                <span class="btn-play-overlay"><i class="fas fa-play"></i></span>
+                            </figure>
+                            <figcaption class="detalles-cancion">
+                                <p class="titulo-cancion">Invincibility Theme (Estrella)</p>
+                                <p class="artista-cancion"><i class="fas fa-star"></i> Koji Kondo - Super Mario Bros</p>
+                            </figcaption>
+                            <aside class="onda-audio">
+                                <i class="fas fa-wave-square"></i>
+                            </aside>
+                            <audio src="/audio/Invincibility Theme.mp3"></audio>
+                        </article>
+
+                    </section>
+                </article>
+
+                <!-- Spotify Embed -->
+                <article class="caja-multimedia tarjeta-efecto">
+                    <h3><i class="fab fa-spotify"></i> Peaches - Jack Black (Mario Bros)</h3>
+                    <figure style="position: relative; border-radius: 12px; overflow: hidden;">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4w9soAM7IrmYDhSXLp14p6?utm_source=generator&si=df60028bd4a64bfc" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </figure>
+                </article>
+
+            </section>
+        </section>
+
+        <!-- PESTAÑA 3: JUEGO -->
+        <section id="pestana-juego" class="contenido-tab">
+            <h2 class="titulo-seccion"><i class="fas fa-gamepad"></i> Zona Arcade Mario Bros</h2>
+            <article class="caja-multimedia tarjeta-efecto" style="text-align: center;">
+                <p style="margin-bottom: 10px; font-weight:bold; color:#ffcc00;">
+                    Moverse: <strong>A / D</strong> o <strong>Flechas</strong> | Saltar: <strong>S</strong> | Correr/Disparar: <strong>A</strong>
+                </p>
+                <figure style="display: flex; flex-direction: column; align-items: center; background: #000; padding: 10px; border-radius: 12px; border: 3px solid #e60012;">
+                    <iframe id="marioIframe" src="/mario-game/main.html" width="640" height="480" style="border: none; border-radius: 8px; width: 100%; max-width: 640px; height: 480px; overflow: hidden;" scrolling="no"></iframe>
+                    <button onclick="pantallaCompleta()" class="btn-rojo" style="margin-top: 15px;">
+                        <i class="fas fa-expand"></i> Pantalla Completa
+                    </button>
+                </figure>
+            </article>
+        </section>
+
+<!-- PESTAÑA 4: HERRAMIENTAS & FANART -->
+<section id="pestana-recursos" class="contenido-tab">
+    <h2 class="titulo-seccion"><i class="fas fa-tools"></i> Centro de Recortes & FanArt Studio</h2>
+    <section class="grid-2-columnas">
+        
+        <!-- VISOR PDF CON PORTADA TEMÁTICA -->
+        <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
+            <h3><i class="fas fa-book-open"></i> Visor de Guías & Manuales PDF</h3>
+            
+            <div class="panel-pdf-top">
+                <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="cargarPDF()">
+                <button onclick="document.getElementById('pdfFileInput').click()" class="btn-rojo">
+                    <i class="fas fa-folder-open"></i> Seleccionar PDF Local
+                </button>
+                <span id="nombreArchivoPdf" style="font-size: 0.85rem; color: #ffcc00; font-weight: bold;">Sin archivo cargado</span>
+            </div>
+
+            <figure class="contenedor-pdf" id="cajaVisorPdf">
+                <!-- Estado por defecto cuando no hay PDF cargado -->
+                <div id="pdfPlaceholder" class="placeholder-pdf">
+                    <img src="/img/logo-mario.jpg" alt="Manual Mario" class="img-placeholder-pdf">
+                    <h4>¡Biblioteca de Guías Gamer!</h4>
+                    <p>Haz clic en <strong>"Seleccionar PDF Local"</strong> arriba para visualizar tus manuales de juego o guías en pantalla completa.</p>
+                </div>
+                <iframe id="visorPdf" src="" width="100%" height="100%" style="border: none; display: none;"></iframe>
+            </figure>
+        </article>
+
+
+        <!-- EDITOR DE ESCENARIOS Y FIGURAS -->
+        <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
+            <h3><i class="fas fa-cubes"></i> Studio Maker: Diseñador de Niveles</h3>
+            
+            <aside class="barramenu-pizarra-pro">
+                <!-- Herramientas de trazo y figuras -->
+                <div class="fila-herramientas">
+                    <label><i class="fas fa-tools"></i> Módulos: 
+                        <select id="toolPicker">
+                            <option value="pen">✏️ Lápiz Libre</option>
+                            <option value="rect">🔲 Rectángulo / Bloque</option>
+                            <option value="circle">⚪ Círculo / Moneda</option>
+                            <option value="line">📏 Línea de Suelo</option>
+                            <option value="eraser">🧹 Borrador</option>
+                        </select>
+                    </label>
+                    <label><i class="fas fa-palette"></i> Color: <input type="color" id="colorPicker" value="#ffcc00"></label>
+                    <label><i class="fas fa-ruler"></i> Grosor: <input type="range" id="sizePicker" min="2" max="30" value="8"></label>
+                </div>
+
+                <!-- Fondo del Lienzo -->
+                <div class="fila-paleta">
+                    <span class="label-paleta">Tema de Fondo:</span>
+                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#0f111a')">🌑 Noche</button>
+                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#1a2634')">Underground</button>
+                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#2b1a0e')">🏰 Castillo</button>
+                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#ffffff')">⚪ Claro</button>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="fila-acciones">
+                    <button id="clearBtn" class="btn-rojo"><i class="fas fa-trash-alt"></i> Limpiar Canvas</button>
+                    <button onclick="guardarDibujo()" class="btn-rojo" style="background: #28a745;"><i class="fas fa-download"></i> Guardar Nivel PNG</button>
+                </div>
+            </aside>
+
+            <figure class="contenedor-lienzo-pro">
+                <canvas id="pizarra" width="500" height="280"></canvas>
+            </figure>
+        </article>
+
+    </section>
+</section>
+
+      <!-- PESTAÑA 5: DESARROLLADOR / PERFIL GITHUB -->
+<section id="pestana-clases" class="contenido-tab">
+    <h2 class="titulo-seccion"><i class="fas fa-user-ninja"></i> Perfil del Creador & GitHub Dev</h2>
+    
+    <article class="caja-multimedia tarjeta-efecto tarjeta-perfil-pro">
+        
+        <!-- Tarjeta de Perfil Principal -->
+        <header class="encabezado-perfil">
+            <figure class="avatar-box">
+                <img src="/img/pol.jpg" alt="Angel Camayo Avatar" class="img-avatar">
+                <span class="badge-status" title="Disponible para Proyectos">ONLINE</span>
+            </figure>
+            
+            <figcaption class="info-creador">
+                <h3>Angel Esteban Rivera Camayo</h3>
+                <p class="rol-dev"><i class="fas fa-code"></i> Frontend & Game Web Developer</p>
+                
+                <div class="stats-gamer">
+                    <span class="stat-badge"><i class="fas fa-star" style="color:#ffcc00;"></i> Nivel: Pro Dev</span>
+                    <span class="stat-badge"><i class="fas fa-folder-open" style="color:#e60012;"></i> Proyectos: Web & Arcade</span>
+                    <span class="stat-badge"><i class="fab fa-github" style="color:#fff;"></i> GitHub Active</span>
+                </div>
+            </figcaption>
+
+            <aside class="btn-github-box">
+                <a href="https://github.com/angelcamayojm-wq" target="_blank" class="btn-github-pro">
+                    <i class="fab fa-github"></i> Visitar GitHub
+                </a>
+            </aside>
+        </header>
+
+        <hr class="divisor-neon">
+
+        <!-- Sección de Proyectos y Prácticas de Diseño -->
+        <section class="seccion-proyectos-dev">
+            <h4 class="subtitulo-dev"><i class="fas fa-laptop-code"></i> Prácticas de Diseño & Tecnologías</h4>
+            
+            <p class="desc-practica">
+                Este portal representa un proyecto integral de diseño web enfocado en la usabilidad, interactividad multimedia y componentes retro de alto rendimiento.
+            </p>
+
+            <!-- Badges de Tecnologías -->
+            <div class="contenedor-badges">
+                <span class="badge-tech"><i class="fab fa-html5" style="color:#e44d26;"></i> HTML5</span>
+                <span class="badge-tech"><i class="fab fa-css3-alt" style="color:#264de4;"></i> CSS3 Glassmorphism</span>
+                <span class="badge-tech"><i class="fab fa-js" style="color:#f7df1e;"></i> JavaScript ES6+</span>
+                <span class="badge-tech"><i class="fas fa-paint-brush" style="color:#ffcc00;"></i> Canvas API</span>
+                <span class="badge-tech"><i class="fas fa-mobile-alt" style="color:#28a745;"></i> Layout Responsivo</span>
+            </div>
+
+            <!-- Galería de Capturas de Práctica -->
+            <div class="grid-galeria-proyectos">
+                <figure class="tarjeta-miniproyecto">
+                    <img src="/img/6.png" alt="Diseño Multimedia">
+                    <figcaption>
+                        <h5>Módulo Multimedia</h5>
+                        <p>Integración de Reproductores & Audio</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="tarjeta-miniproyecto">
+                    <img src="/img/7.png" alt="Motor Arcade">
+                    <figcaption>
+                        <h5>Emulador Arcade</h5>
+                        <p>Ejecución e Interacción de Canvas 2D</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="tarjeta-miniproyecto">
+                    <img src="/img/8.png" alt="Herramientas FanArt">
+                    <figcaption>
+                        <h5>FanArt & Editor</h5>
+                        <p>Plataforma de Trazado de Vectores</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+    </article>
+</section>
+
+    <!-- FOOTER PERSONALIZADO -->
+    <footer>
+        <p><strong>Super Mario Bros Gaming Hub</strong> &copy; 2026</p>
+        <p style="font-size: 0.85rem; color: #ffcc00; margin-top: 5px;">
+            Desarrollado por: <strong>Angel Esteban Rivera Camayo</strong> | Tecnólogo en Análisis y Desarrollo de Software - SENA
+        </p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
