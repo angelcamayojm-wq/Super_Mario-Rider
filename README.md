@@ -1,12 +1,18 @@
 <div align="center">
 
-![Mario Banner](https://raw.githubusercontent.com/gist/assets/3f7a42ec3a42d38561d2d348873729e2/mario.gif)
+![Dragon Ball Banner](https://media.giphy.com/media/13fTar4VVaFlG8/giphy.gif)
 
 # 🍄 SUPER MARIO BROS - GAMING HUB 🎮
 
-### 🌟 *"Here We Go! Portal Web Interactivo"* 🌟
+### ⚡ *"Here We Go! Portal Web Interactivo"* ⚡
 
-[![Desplegado en Render](https://img.shields.io/badge/🚀_PROBAR_WEB_EN_VIVO-Click_Aquí-24C48E?style=for-the-badge&logo=render&logoColor=white)](https://super-mario-gaming-hub.onrender.com/)
+---
+
+### 🚀 ⚡ ¡DESPLIEGUE EN VIVO! ⚡ 🚀
+### 🌐 **[👉 🎮 HAZ CLIC AQUÍ PARA PROBAR LA WEB EN VIVO 🎮 👈](https://super-mario-gaming-hub.onrender.com/)** 🌐
+
+[![Render Live](https://img.shields.io/badge/🔥_ESTADO-ONLINE_100%25-24C48E?style=for-the-badge&logo=render&logoColor=white)](https://super-mario-gaming-hub.onrender.com/)
+[![Servidor](https://img.shields.io/badge/⚡_SERVIDOR-NODE_EXPRESS-FF6C37?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://super-mario-gaming-hub.onrender.com/)
 
 ---
 
