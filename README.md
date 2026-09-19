@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🍄 SUPER MARIO BROS - GAMING HUB 🎮
+![Mario Banner](https://raw.githubusercontent.com/gist/assets/3f7a42ec3a42d38561d2d348873729e2/mario.gif)
 
-![Mario Animated Banner](https://media.giphy.com/media/i33719vyeeq2mw1M5B/giphy.gif)
+# 🍄 SUPER MARIO BROS - GAMING HUB 🎮
 
 ### 🌟 *"Here We Go! Portal Web Interactivo"* 🌟
 
@@ -26,7 +26,7 @@
 | Módulo 📦 | Descripción 🎯 | Estado ⚡ |
 | :---: | :--- | :---: |
 | 🎬 **Videos** | Tráilers HD & Reproductor de Video | 🟢 ON |
-| 🎧 **Música** | SoundtracksRetro & Spotify Player | 🟢 ON |
+| 🎧 **Música** | Soundtracks Retro & Spotify Player | 🟢 ON |
 | 🎮 **Arcade** | Emulador Jugable de Mario Bros NES | 🟢 ON |
 | 🛠️ **Studio** | Editor de Niveles Canvas & Visor PDF | 🟢 ON |
 | 👤 **Perfil** | Portafolio Gamer & Links a GitHub | 🟢 ON |
@@ -37,9 +37,7 @@
 
 <div align="center">
 
-### 🎨 ⚡ Animaciones & Modos
-![Mario Running](https://media.giphy.com/media/4VnJv57HY43oA/giphy.gif)
-
+### 🎨 ⚡ Características & Diseño
 ✨ **Efectos Neón Glassmorphism** | 🌌 **Fondo HD en Bucle** | 📱 **100% Responsivo**
 
 ---
@@ -51,7 +49,5 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub_Perfil-24292e?style=for-the-badge&logo=github&logoColor=white)](https://github.com/angelcamayojm-wq)
 [![Probar Web](https://img.shields.io/badge/🎮_Probar_Portal-e60012?style=for-the-badge&logo=nintendo-switch&logoColor=white)](https://super-mario-gaming-hub.onrender.com/)
-
-![](https://media.giphy.com/media/13fTar4VVaFlG8/giphy.gif)
 
 </div>
