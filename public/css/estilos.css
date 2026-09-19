@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap');
 
+/* ==================== RESET GENERAL & FUENTES ==================== */
 * {
     margin: 0;
     padding: 0;
@@ -187,7 +188,7 @@ header {
     background: #000;
 }
 
-/* ==================== DISEÑO INTERACTIVO DE LISTA DE MÚSICA ==================== */
+/* ==================== LISTA DE CANCIONES LOCALES ==================== */
 .tarjeta-cancion-pro {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -210,7 +211,6 @@ header {
     box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
 }
 
-/* Ajuste de carátula para que la imagen se vea entera y bien alineada */
 .caratula-cancion {
     position: relative;
     width: 60px;
@@ -276,84 +276,121 @@ header {
     opacity: 1;
 }
 
-/* ==================== BOTONES Y COMPONENTES GENERALES ==================== */
-.btn-rojo {
-    background: #e60012;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+/* ==================== EMISORA EN VIVO CON CARÁTULA DE MARIO ==================== */
+.tarjeta-radio-custom {
+    background: rgba(15, 17, 26, 0.85) !important;
+    border: 2px solid #e60012 !important;
+    box-shadow: 0 0 15px rgba(230, 0, 18, 0.4);
 }
 
-.btn-rojo:hover {
-    background: #b3000e;
-    transform: scale(1.03);
-}
-
-/* ==================== BOTÓN FLOTANTE ==================== */
-#btnMuteFlotante {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    background: #e60012;
-    color: #fff;
-    border: 2px solid #ffcc00;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+.reproductor-radio-gamer {
     display: flex;
     align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 204, 0, 0.3);
+}
+
+.caratula-radio-mario {
+    position: relative;
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #ffcc00;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.caratula-radio-mario img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge-live-dot {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    border: 2px solid #000;
+    box-shadow: 0 0 6px #ff4d4d;
+}
+
+.detalles-radio-mario {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    transition: transform 0.2s;
+    flex-grow: 1;
+    gap: 6px;
 }
 
-#btnMuteFlotante:hover {
-    transform: scale(1.1);
+.nombre-emisora {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
 }
 
-/* ==================== FOOTER ==================== */
-footer {
-    background: rgba(10, 5, 15, 0.95);
-    border-top: 2px solid #e60012;
-    text-align: center;
-    padding: 15px 20px;
-    margin-top: auto;
+.subtexto-radio {
+    font-size: 0.78rem;
+    color: #ffcc00;
+    margin: 0;
 }
 
-/* ==================== PANTALLA COMPLETA JUEGO ==================== */
-iframe:-webkit-full-screen {
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: contain;
+.btn-radio-play {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e60012, #ffcc00);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(230, 0, 18, 0.6);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
 }
 
-iframe:-moz-full-screen {
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: contain;
+.btn-radio-play:hover {
+    transform: scale(1.08);
 }
 
-iframe:fullscreen {
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: contain;
+/* Animación Ecualizador Radio */
+.ecualizador-ondas {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 14px;
 }
 
+.ecualizador-ondas span {
+    width: 4px;
+    height: 4px;
+    background: #ffcc00;
+    border-radius: 2px;
+}
 
-/* ==================== ESTILOS AVANZADOS HERRAMIENTAS Y PIZARRA ==================== */
+.ecualizador-ondas.sonando span {
+    animation: ondaRadio 0.6s infinite alternate ease-in-out;
+}
+
+.ecualizador-ondas.sonando span:nth-child(2) { animation-delay: 0.15s; }
+.ecualizador-ondas.sonando span:nth-child(3) { animation-delay: 0.3s; }
+.ecualizador-ondas.sonando span:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes ondaRadio {
+    0% { height: 4px; }
+    100% { height: 14px; }
+}
+
+/* ==================== HERRAMIENTAS, VISOR PDF & PIZARRA ==================== */
 .tarjeta-herramienta {
     display: flex;
     flex-direction: column;
@@ -431,52 +468,6 @@ iframe:fullscreen {
     color: #ffcc00;
 }
 
-.contenedor-lienzo-pro {
-    flex: 1;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 3px solid #ffcc00;
-    margin-top: 10px;
-    background-color: #ffffff;
-    /* Fondo con cuadrícula estilo cuaderno de dibujo */
-    background-image: linear-gradient(rgba(200, 200, 200, 0.3) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(200, 200, 200, 0.3) 1px, transparent 1px);
-    background-size: 20px 20px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-#pizarra {
-    width: 100%;
-    height: 100%;
-    cursor: crosshair;
-    display: block;
-}
-/* ==================== ESTILOS DEL EDITOR DE NIVELES ==================== */
-.estanteria-guias {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.btn-mini-guia {
-    background: rgba(255, 204, 0, 0.15);
-    color: #ffcc00;
-    border: 1px solid #ffcc00;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s;
-}
-
-.btn-mini-guia:hover {
-    background: #ffcc00;
-    color: #000;
-}
-
 .btn-tema-lienzo {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -498,8 +489,7 @@ iframe:fullscreen {
     overflow: hidden;
     border: 2px solid #e60012;
     margin-top: 10px;
-    background-color: #0f111a; /* Fondo Oscuro por defecto */
-    /* Cuadrícula neón sobre fondo oscuro */
+    background-color: #0f111a;
     background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
     background-size: 25px 25px;
@@ -513,10 +503,9 @@ iframe:fullscreen {
     display: block;
 }
 
-
-/* ==================== ESTILOS DEL PERFIL Y GITHUB ==================== */
+/* ==================== ESTILOS PERFIL & GITHUB ==================== */
 .tarjeta-perfil-pro {
-    padding: 30px;
+    padding: 25px;
     background: rgba(18, 20, 32, 0.9);
     border: 2px solid rgba(255, 204, 0, 0.4);
     box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -525,14 +514,14 @@ iframe:fullscreen {
 .encabezado-perfil {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
 .avatar-box {
     position: relative;
-    width: 110px;
-    height: 110px;
+    width: 90px;
+    height: 90px;
 }
 
 .img-avatar {
@@ -559,15 +548,15 @@ iframe:fullscreen {
 
 .info-creador h3 {
     font-family: 'Press Start 2P', cursive;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #ffcc00;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .rol-dev {
     color: #ddd;
-    font-size: 1rem;
-    margin-bottom: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
 }
 
 .stats-gamer {
@@ -579,122 +568,49 @@ iframe:fullscreen {
 .stat-badge {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: bold;
-}
-
-.btn-github-box {
-    margin-left: auto;
-}
-
-.btn-github-pro {
-    background: #24292e;
-    color: #ffffff;
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-weight: bold;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 2px solid #ffcc00;
-    box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.btn-github-pro:hover {
-    background: #e60012;
-    color: #ffcc00;
-    transform: translateY(-3px);
 }
 
 .divisor-neon {
     border: none;
     height: 1px;
     background: linear-gradient(90deg, transparent, #ffcc00, transparent);
-    margin: 25px 0;
-}
-
-.subtitulo-dev {
-    color: #ffcc00;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+    margin: 20px 0;
 }
 
 .desc-practica {
     color: #ccc;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin-bottom: 15px;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 .contenedor-badges {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .badge-tech {
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 8px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .grid-galeria-proyectos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
-}
-
-.tarjeta-miniproyecto {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.tarjeta-miniproyecto:hover {
-    transform: translateY(-5px);
-    border-color: #ffcc00;
-}
-
-.tarjeta-miniproyecto img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-}
-
-.tarjeta-miniproyecto figcaption {
-    padding: 12px;
-}
-
-.tarjeta-miniproyecto h5 {
-    color: #ffcc00;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-}
-
-.tarjeta-miniproyecto p {
-    color: #aaa;
-    font-size: 0.8rem;
-}
-
-/* ==================== GALERÍA DE PROYECTOS PROPORCIONAL ==================== */
-.grid-galeria-proyectos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
 }
 
 .tarjeta-miniproyecto {
@@ -702,40 +618,241 @@ iframe:fullscreen {
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-    display: flex;
-    flex-direction: column;
+    transition: transform 0.3s ease;
 }
 
 .tarjeta-miniproyecto:hover {
     transform: translateY(-5px);
     border-color: #ffcc00;
-    box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
 }
 
-/* Ajuste proporcional para que las imágenes se vean enteras */
 .tarjeta-miniproyecto img {
     width: 100%;
-    height: 160px; /* Aumentamos el alto */
-    object-fit: contain; /* Cambiamos cover por contain para que NO se recorte la imagen */
-    background: #0d0e15; /* Fondo oscuro detrás por si la imagen tiene espacio */
-    padding: 8px;
+    height: 130px;
+    object-fit: contain;
+    background: #0d0e15;
+    padding: 6px;
     display: block;
 }
 
 .tarjeta-miniproyecto figcaption {
-    padding: 12px 15px;
+    padding: 10px;
     background: rgba(15, 10, 20, 0.8);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .tarjeta-miniproyecto h5 {
     color: #ffcc00;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
+    font-size: 0.88rem;
+    margin-bottom: 3px;
 }
 
 .tarjeta-miniproyecto p {
     color: #aaa;
+    font-size: 0.75rem;
+}
+
+/* ==================== BOTONES & BOTÓN FLOTANTE ==================== */
+.btn-rojo {
+    background: #e60012;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-rojo:hover {
+    background: #b3000e;
+    transform: scale(1.03);
+}
+
+#btnMuteFlotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #e60012;
+    color: #fff;
+    border: 2px solid #ffcc00;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+#btnMuteFlotante:hover {
+    transform: scale(1.1);
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+    background: rgba(10, 5, 15, 0.95);
+    border-top: 2px solid #e60012;
+    text-align: center;
+    padding: 15px 20px;
+    margin-top: auto;
+}
+
+.grid-galeria-proyectos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 15px;
+}
+
+/* En pantallas pequeñas de celular se adapta automáticamente */
+@media (max-width: 768px) {
+    .grid-galeria-proyectos {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== CORRECCIÓN DE BOTÓN GITHUB ==================== */
+.btn-github-pro {
+    background: #181925 !important;
+    color: #ffffff !important;
+    padding: 10px 20px !important;
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border: 2px solid #ffcc00 !important;
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    font-size: 0.9rem !important;
+}
+
+.btn-github-pro:hover {
+    background: #e60012 !important;
+    color: #ffcc00 !important;
+    border-color: #ffcc00 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0 18px rgba(230, 0, 18, 0.6) !important;
+}
+
+/* ==================== MAPA ESTILO GAMER DARK NEÓN ==================== */
+.tarjeta-mapa-gamer {
+    border: 2px solid #e60012 !important;
+    box-shadow: 0 0 15px rgba(230, 0, 18, 0.3) !important;
+}
+
+.encabezado-mapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.badge-ubicacion {
+    background: rgba(255, 204, 0, 0.15);
+    color: #ffcc00;
+    border: 1px solid #ffcc00;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.contenedor-iframe-mapa {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 204, 0, 0.4);
+    position: relative;
+    margin: 0;
+}
+
+/* Transformación de Google Maps a Modo Oscuro Neón */
+.contenedor-iframe-mapa iframe {
+    filter: invert(90%) hue-rotate(180deg) contrast(120%);
+    transition: filter 0.3s ease;
+}
+
+.contenedor-iframe-mapa:hover iframe {
+    filter: invert(92%) hue-rotate(180deg) contrast(110%);
+}
+
+/* ==================== ENCABEZADO DE PERFIL Y BOTÓN DERECHA ==================== */
+.encabezado-perfil {
+    display: flex;
+    justify-content: space-between; /* Empuja el botón a la derecha extrema */
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.perfil-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-github-box {
+    margin-left: auto; /* Fuerza la alineación completa a la derecha */
+}
+
+/* ==================== MAPA GAMER Y REFINAMIENTO VISUAL ==================== */
+.tarjeta-mapa-gamer {
+    border: 2px solid #e60012 !important;
+    box-shadow: 0 0 15px rgba(230, 0, 18, 0.3) !important;
+}
+
+.encabezado-mapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.titulo-mapa-icono {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icono-mapa-neon {
+    font-size: 1.8rem;
+    color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+.subtexto-mapa {
     font-size: 0.8rem;
+    color: #aaa;
+    margin: 0;
+}
+
+.contenedor-iframe-mapa {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 204, 0, 0.4);
+    position: relative;
+    margin: 0;
+    background: #000;
+}
+
+/* Filtro oscuro perfecto para Google Maps sin letras blancas desfasadas */
+.contenedor-iframe-mapa iframe {
+    filter: invert(90%) hue-rotate(180deg) contrast(110%) saturate(120%);
+    transition: filter 0.3s ease;
+}
+
+.contenedor-iframe-mapa:hover iframe {
+    filter: invert(92%) hue-rotate(180deg) contrast(105%) saturate(130%);
 }

@@ -311,3 +311,19 @@ function cargarPDFDemo(url, nombre) {
         if (labelNombre) labelNombre.textContent = nombre;
     }
 }
+
+function toggleRadio() {
+    const audio = document.getElementById('audioEmisora');
+    const icono = document.getElementById('iconoRadio');
+    const ecualizador = document.getElementById('ecualizador');
+
+    if (audio.paused) {
+        audio.play();
+        icono.className = 'fas fa-pause';
+        ecualizador.classList.add('sonando');
+    } else {
+        audio.pause();
+        icono.className = 'fas fa-play';
+        ecualizador.classList.remove('sonando');
+    }
+}

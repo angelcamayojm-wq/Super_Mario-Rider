@@ -54,7 +54,7 @@
 
     <main class="contenedor-principal">
         
-        <!-- PESTAÑA 1: VIDEOS -->
+        <!-- ==================== PESTAÑA 1: VIDEOS ==================== -->
         <section id="pestana-videos" class="contenido-tab activa">
             <h2 class="titulo-seccion"><i class="fas fa-film"></i> Gameplays y Tráilers Oficiales</h2>
             <section class="grid-2-columnas">
@@ -79,7 +79,7 @@
             </section>
         </section>
 
-        <!-- PESTAÑA 2: MÚSICA -->
+        <!-- ==================== PESTAÑA 2: MÚSICA ==================== -->
         <section id="pestana-musica" class="contenido-tab">
             <h2 class="titulo-seccion"><i class="fas fa-headphones"></i> Soundtracks & Audio Gamer</h2>
             <section class="grid-2-columnas">
@@ -137,25 +137,56 @@
                     </section>
                 </article>
 
-                <!-- Spotify Embed -->
-                <article class="caja-multimedia tarjeta-efecto">
-                    <h3><i class="fab fa-spotify"></i> Peaches - Jack Black (Mario Bros)</h3>
-                    <figure style="position: relative; border-radius: 12px; overflow: hidden;">
-                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4w9soAM7IrmYDhSXLp14p6?utm_source=generator&si=df60028bd4a64bfc" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    </figure>
-                </article>
+                <!-- Columna Derecha: Spotify Embed + Radio Colombia -->
+                <section style="display: flex; flex-direction: column; gap: 20px;">
+                    <article class="caja-multimedia tarjeta-efecto">
+                        <h3><i class="fab fa-spotify"></i> Peaches - Jack Black (Mario Bros)</h3>
+                        <figure style="position: relative; border-radius: 12px; overflow: hidden; margin: 0;">
+                            <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4w9soAM7IrmYDhSXLp14p6?utm_source=generator&si=df60028bd4a64bfc" width="100%" height="220" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </figure>
+                    </article>
+
+                    <!-- Radio Integrada con Carátula de Mario -->
+                    <article class="caja-multimedia tarjeta-efecto tarjeta-radio-custom">
+                        <h3><i class="fas fa-radio"></i> Emisora en Vivo (Caracol Radio)</h3>
+                        
+                        <div class="reproductor-radio-gamer">
+                            <figure class="caratula-radio-mario">
+                                <img src="/img/radio.jpg" alt="Radio Mario">
+                                <span class="badge-live-dot"></span>
+                            </figure>
+
+                            <div class="detalles-radio-mario">
+                                <div class="info-radio-status">
+                                    <p class="nombre-emisora">Caracol Radio 100.9 FM</p>
+                                    <p class="subtexto-radio"><i class="fas fa-broadcast-tower"></i> Señal en Vivo • Colombia</p>
+                                </div>
+
+                                <div class="ecualizador-ondas" id="ecualizador">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+
+                            <button id="btnPlayRadio" class="btn-radio-play" onclick="toggleRadio()">
+                                <i class="fas fa-play" id="iconoRadio"></i>
+                            </button>
+                        </div>
+
+                        <audio id="audioEmisora" src="https://26483.live.streamtheworld.com/CARACOL_RADIO.mp3" preload="none"></audio>
+                    </article>
+                </section>
 
             </section>
         </section>
 
-        <!-- PESTAÑA 3: JUEGO -->
+        <!-- ==================== PESTAÑA 3: JUEGO ==================== -->
         <section id="pestana-juego" class="contenido-tab">
             <h2 class="titulo-seccion"><i class="fas fa-gamepad"></i> Zona Arcade Mario Bros</h2>
             <article class="caja-multimedia tarjeta-efecto" style="text-align: center;">
                 <p style="margin-bottom: 10px; font-weight:bold; color:#ffcc00;">
                     Moverse: <strong>A / D</strong> o <strong>Flechas</strong> | Saltar: <strong>S</strong> | Correr/Disparar: <strong>A</strong>
                 </p>
-                <figure style="display: flex; flex-direction: column; align-items: center; background: #000; padding: 10px; border-radius: 12px; border: 3px solid #e60012;">
+                <figure style="display: flex; flex-direction: column; align-items: center; background: #000; padding: 10px; border-radius: 12px; border: 3px solid #e60012; margin: 0;">
                     <iframe id="marioIframe" src="/mario-game/main.html" width="640" height="480" style="border: none; border-radius: 8px; width: 100%; max-width: 640px; height: 480px; overflow: hidden;" scrolling="no"></iframe>
                     <button onclick="pantallaCompleta()" class="btn-rojo" style="margin-top: 15px;">
                         <i class="fas fa-expand"></i> Pantalla Completa
@@ -164,103 +195,100 @@
             </article>
         </section>
 
-<!-- PESTAÑA 4: HERRAMIENTAS & FANART -->
-<section id="pestana-recursos" class="contenido-tab">
-    <h2 class="titulo-seccion"><i class="fas fa-tools"></i> Centro de Recortes & FanArt Studio</h2>
-    <section class="grid-2-columnas">
-        
-        <!-- VISOR PDF CON PORTADA TEMÁTICA -->
-        <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
-            <h3><i class="fas fa-book-open"></i> Visor de Guías & Manuales PDF</h3>
-            
-            <div class="panel-pdf-top">
-                <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="cargarPDF()">
-                <button onclick="document.getElementById('pdfFileInput').click()" class="btn-rojo">
-                    <i class="fas fa-folder-open"></i> Seleccionar PDF Local
-                </button>
-                <span id="nombreArchivoPdf" style="font-size: 0.85rem; color: #ffcc00; font-weight: bold;">Sin archivo cargado</span>
+        <!-- ==================== PESTAÑA 4: HERRAMIENTAS & FANART ==================== -->
+        <section id="pestana-recursos" class="contenido-tab">
+            <h2 class="titulo-seccion"><i class="fas fa-tools"></i> Centro de Recortes & FanArt Studio</h2>
+            <section class="grid-2-columnas">
+                
+                <!-- Visor PDF -->
+                <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
+                    <h3><i class="fas fa-book-open"></i> Visor de Guías & Manuales PDF</h3>
+                    
+                    <div class="panel-pdf-top">
+                        <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="cargarPDF()">
+                        <button onclick="document.getElementById('pdfFileInput').click()" class="btn-rojo">
+                            <i class="fas fa-folder-open"></i> Seleccionar PDF Local
+                        </button>
+                        <span id="nombreArchivoPdf" style="font-size: 0.85rem; color: #ffcc00; font-weight: bold;">Sin archivo cargado</span>
+                    </div>
+
+                    <figure class="contenedor-pdf" id="cajaVisorPdf">
+                        <div id="pdfPlaceholder" class="placeholder-pdf">
+                            <img src="/img/logo-mario.jpg" alt="Manual Mario" class="img-placeholder-pdf">
+                            <h4>¡Biblioteca de Guías Gamer!</h4>
+                            <p>Haz clic en <strong>"Seleccionar PDF Local"</strong> arriba para visualizar tus manuales de juego.</p>
+                        </div>
+                        <iframe id="visorPdf" src="" width="100%" height="100%" style="border: none; display: none;"></iframe>
+                    </figure>
+                </article>
+
+                <!-- Editor de Niveles -->
+                <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
+                    <h3><i class="fas fa-cubes"></i> Studio Maker: Diseñador de Niveles</h3>
+                    
+                    <aside class="barramenu-pizarra-pro">
+                        <div class="fila-herramientas">
+                            <label><i class="fas fa-tools"></i> Módulos: 
+                                <select id="toolPicker">
+                                    <option value="pen">✏️ Lápiz Libre</option>
+                                    <option value="rect">🔲 Rectángulo / Bloque</option>
+                                    <option value="circle">⚪ Círculo / Moneda</option>
+                                    <option value="line">📏 Línea de Suelo</option>
+                                    <option value="eraser">🧹 Borrador</option>
+                                </select>
+                            </label>
+                            <label><i class="fas fa-palette"></i> Color: <input type="color" id="colorPicker" value="#ffcc00"></label>
+                            <label><i class="fas fa-ruler"></i> Grosor: <input type="range" id="sizePicker" min="2" max="30" value="8"></label>
+                        </div>
+
+                        <div class="fila-paleta">
+                            <span class="label-paleta">Tema de Fondo:</span>
+                            <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#0f111a')">🌑 Noche</button>
+                            <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#1a2634')">Underground</button>
+                            <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#2b1a0e')">🏰 Castillo</button>
+                            <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#ffffff')">⚪ Claro</button>
+                        </div>
+
+                        <div class="fila-acciones">
+                            <button id="clearBtn" class="btn-rojo"><i class="fas fa-trash-alt"></i> Limpiar Canvas</button>
+                            <button onclick="guardarDibujo()" class="btn-rojo" style="background: #28a745;"><i class="fas fa-download"></i> Guardar Nivel PNG</button>
+                        </div>
+                    </aside>
+
+                    <figure class="contenedor-lienzo-pro">
+                        <canvas id="pizarra" width="500" height="280"></canvas>
+                    </figure>
+                </article>
+
+            </section>
+        </section>
+
+       <!-- ==================== PESTAÑA 5: ACADEMIA / PERFIL Y MAPA ==================== -->
+<section id="pestana-clases" class="contenido-tab">
+    <h2 class="titulo-seccion"><i class="fas fa-user-ninja"></i> Perfil del Creador & Ubicación</h2>
+    
+    <!-- TARJETA 1: PERFIL PRINCIPAL -->
+    <article class="caja-multimedia tarjeta-efecto tarjeta-perfil-pro" style="margin-bottom: 25px;">
+        <header class="encabezado-perfil">
+            <div class="perfil-izquierda">
+                <figure class="avatar-box">
+                    <img src="/img/pol.jpg" alt="Angel Camayo Avatar" class="img-avatar">
+                    <span class="badge-status" title="Disponible para Proyectos">ONLINE</span>
+                </figure>
+                
+                <figcaption class="info-creador">
+                    <h3>Angel Esteban Rivera Camayo</h3>
+                    <p class="rol-dev"><i class="fas fa-code"></i> Frontend & Game Web Developer</p>
+                    
+                    <div class="stats-gamer">
+                        <span class="stat-badge"><i class="fas fa-star" style="color:#ffcc00;"></i> Nivel: Pro Dev</span>
+                        <span class="stat-badge"><i class="fas fa-folder-open" style="color:#e60012;"></i> Proyectos: Web & Arcade</span>
+                        <span class="stat-badge"><i class="fab fa-github" style="color:#fff;"></i> GitHub Active</span>
+                    </div>
+                </figcaption>
             </div>
 
-            <figure class="contenedor-pdf" id="cajaVisorPdf">
-                <!-- Estado por defecto cuando no hay PDF cargado -->
-                <div id="pdfPlaceholder" class="placeholder-pdf">
-                    <img src="/img/logo-mario.jpg" alt="Manual Mario" class="img-placeholder-pdf">
-                    <h4>¡Biblioteca de Guías Gamer!</h4>
-                    <p>Haz clic en <strong>"Seleccionar PDF Local"</strong> arriba para visualizar tus manuales de juego o guías en pantalla completa.</p>
-                </div>
-                <iframe id="visorPdf" src="" width="100%" height="100%" style="border: none; display: none;"></iframe>
-            </figure>
-        </article>
-
-
-        <!-- EDITOR DE ESCENARIOS Y FIGURAS -->
-        <article class="caja-multimedia tarjeta-efecto tarjeta-herramienta">
-            <h3><i class="fas fa-cubes"></i> Studio Maker: Diseñador de Niveles</h3>
-            
-            <aside class="barramenu-pizarra-pro">
-                <!-- Herramientas de trazo y figuras -->
-                <div class="fila-herramientas">
-                    <label><i class="fas fa-tools"></i> Módulos: 
-                        <select id="toolPicker">
-                            <option value="pen">✏️ Lápiz Libre</option>
-                            <option value="rect">🔲 Rectángulo / Bloque</option>
-                            <option value="circle">⚪ Círculo / Moneda</option>
-                            <option value="line">📏 Línea de Suelo</option>
-                            <option value="eraser">🧹 Borrador</option>
-                        </select>
-                    </label>
-                    <label><i class="fas fa-palette"></i> Color: <input type="color" id="colorPicker" value="#ffcc00"></label>
-                    <label><i class="fas fa-ruler"></i> Grosor: <input type="range" id="sizePicker" min="2" max="30" value="8"></label>
-                </div>
-
-                <!-- Fondo del Lienzo -->
-                <div class="fila-paleta">
-                    <span class="label-paleta">Tema de Fondo:</span>
-                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#0f111a')">🌑 Noche</button>
-                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#1a2634')">Underground</button>
-                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#2b1a0e')">🏰 Castillo</button>
-                    <button class="btn-tema-lienzo" onclick="cambiarFondoLienzo('#ffffff')">⚪ Claro</button>
-                </div>
-
-                <!-- Botones de Acción -->
-                <div class="fila-acciones">
-                    <button id="clearBtn" class="btn-rojo"><i class="fas fa-trash-alt"></i> Limpiar Canvas</button>
-                    <button onclick="guardarDibujo()" class="btn-rojo" style="background: #28a745;"><i class="fas fa-download"></i> Guardar Nivel PNG</button>
-                </div>
-            </aside>
-
-            <figure class="contenedor-lienzo-pro">
-                <canvas id="pizarra" width="500" height="280"></canvas>
-            </figure>
-        </article>
-
-    </section>
-</section>
-
-      <!-- PESTAÑA 5: DESARROLLADOR / PERFIL GITHUB -->
-<section id="pestana-clases" class="contenido-tab">
-    <h2 class="titulo-seccion"><i class="fas fa-user-ninja"></i> Perfil del Creador & GitHub Dev</h2>
-    
-    <article class="caja-multimedia tarjeta-efecto tarjeta-perfil-pro">
-        
-        <!-- Tarjeta de Perfil Principal -->
-        <header class="encabezado-perfil">
-            <figure class="avatar-box">
-                <img src="/img/pol.jpg" alt="Angel Camayo Avatar" class="img-avatar">
-                <span class="badge-status" title="Disponible para Proyectos">ONLINE</span>
-            </figure>
-            
-            <figcaption class="info-creador">
-                <h3>Angel Esteban Rivera Camayo</h3>
-                <p class="rol-dev"><i class="fas fa-code"></i> Frontend & Game Web Developer</p>
-                
-                <div class="stats-gamer">
-                    <span class="stat-badge"><i class="fas fa-star" style="color:#ffcc00;"></i> Nivel: Pro Dev</span>
-                    <span class="stat-badge"><i class="fas fa-folder-open" style="color:#e60012;"></i> Proyectos: Web & Arcade</span>
-                    <span class="stat-badge"><i class="fab fa-github" style="color:#fff;"></i> GitHub Active</span>
-                </div>
-            </figcaption>
-
+            <!-- Botón pegado a la derecha -->
             <aside class="btn-github-box">
                 <a href="https://github.com/angelcamayojm-wq" target="_blank" class="btn-github-pro">
                     <i class="fab fa-github"></i> Visitar GitHub
@@ -270,7 +298,6 @@
 
         <hr class="divisor-neon">
 
-        <!-- Sección de Proyectos y Prácticas de Diseño -->
         <section class="seccion-proyectos-dev">
             <h4 class="subtitulo-dev"><i class="fas fa-laptop-code"></i> Prácticas de Diseño & Tecnologías</h4>
             
@@ -287,7 +314,7 @@
                 <span class="badge-tech"><i class="fas fa-mobile-alt" style="color:#28a745;"></i> Layout Responsivo</span>
             </div>
 
-            <!-- Galería de Capturas de Práctica -->
+            <!-- Galería de 3 Columnas -->
             <div class="grid-galeria-proyectos">
                 <figure class="tarjeta-miniproyecto">
                     <img src="/img/6.png" alt="Diseño Multimedia">
@@ -314,8 +341,33 @@
                 </figure>
             </div>
         </section>
-
     </article>
+
+    <!-- TARJETA 2: MAPA GAMER CON ICONO Y ESTILO NEÓN -->
+    <article class="caja-multimedia tarjeta-efecto tarjeta-mapa-gamer">
+        <header class="encabezado-mapa">
+            <div class="titulo-mapa-icono">
+                <i class="fas fa-map-marked-alt icono-mapa-neon"></i>
+                <div>
+                    <h3>Base de Operaciones / Ubicación</h3>
+                    <p class="subtexto-mapa">Mapa Interactivo GPS Gamer</p>
+                </div>
+            </div>
+            <span class="badge-ubicacion"><i class="fas fa-location-dot"></i> Popayán, Cauca - Colombia</span>
+        </header>
+
+        <figure class="contenedor-iframe-mapa">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3986.096894318717!2d-76.602283!3d2.441928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30030588625907%3A0x6b4be9bbef241772!2sPopay%C3%A1n%2C%20Cauca!5e0!2m3!1es!2sco!4v1710000000000!5m2!1es!2sco" 
+                width="100%" 
+                height="340" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </figure>
+    </article>
+
 </section>
 
     <!-- FOOTER PERSONALIZADO -->
