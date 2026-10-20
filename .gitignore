@@ -1,0 +1,20 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Firebase and cloud service credentials
+*.json
+*.pem
+*.key
+*service-account*.json
+firebase-adminsdk-*.json
+
+# Local databases, logs, and IDE files
+data/
+*.sqlite
+*.sqlite3
+*.log
+.idea/
+.DS_Store
+npm-debug.log*

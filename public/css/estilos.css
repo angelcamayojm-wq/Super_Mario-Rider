@@ -17,6 +17,136 @@ body {
     min-height: 100vh;
 }
 
+body.app-bloqueada > header,
+body.app-bloqueada > main,
+body.app-bloqueada > footer,
+body.app-bloqueada > .selector-cloud,
+body.app-bloqueada > #btnMuteFlotante {
+    display: none;
+}
+
+.auth-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: linear-gradient(rgba(9, 11, 25, .76), rgba(9, 11, 25, .92)), url('/img/king kong.jpg') center / cover;
+    overflow-y: auto;
+}
+.auth-gate-card {
+    width: min(920px, 100%);
+    overflow: hidden;
+    border: 2px solid #ffcc00;
+    border-radius: 20px;
+    background: rgba(12, 17, 36, .96);
+    box-shadow: 0 20px 70px rgba(0, 0, 0, .72);
+}
+.auth-gate-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px 24px;
+    border-bottom: 2px solid #e52521;
+    color: #ffcc00;
+    font: .9rem 'Press Start 2P', cursive;
+}
+.auth-gate-brand img {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border: 2px solid #ffcc00;
+    border-radius: 9px;
+}
+.auth-gate-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.auth-gate-promo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 390px;
+    padding: 38px;
+    background: radial-gradient(circle at 85% 10%, rgba(229, 37, 33, .5), transparent 36%), linear-gradient(145deg, #123d8c, #111527);
+}
+.auth-gate-promo h1 {
+    margin: 18px 0 12px;
+    color: #fff;
+    font: 1.35rem/1.5 'Press Start 2P', cursive;
+    text-shadow: 3px 3px #e52521;
+}
+.auth-gate-promo p {
+    max-width: 390px;
+    color: #e4e8f7;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+.auth-gate-form {
+    padding: 32px;
+    background: rgba(10, 13, 27, .82);
+}
+.gate-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 21px;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+.gate-tab {
+    padding: 11px 8px;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    color: #aeb8d3;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+}
+.gate-tab.activa {
+    border-bottom-color: #e52521;
+    color: #ffcc00;
+}
+.gate-form {
+    display: grid;
+    gap: 14px;
+}
+.gate-form label {
+    display: grid;
+    gap: 6px;
+    color: #fff;
+    font-weight: 700;
+}
+.gate-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #56617c;
+    border-radius: 8px;
+    outline: none;
+    color: #fff;
+    background: rgba(0, 0, 0, .3);
+}
+.gate-form input:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 0 3px rgba(255, 204, 0, .15);
+}
+.gate-form small, .gate-form .texto-ayuda {
+    color: #aeb8d3;
+    font-weight: 400;
+}
+.gate-message {
+    min-height: 22px;
+    margin-bottom: 8px;
+    color: #ff8c87;
+}
+.gate-message.ok { color: #72efa2; }
+@media (max-width: 720px) {
+    .auth-gate-layout { grid-template-columns: 1fr; }
+    .auth-gate-promo { min-height: auto; padding: 25px; }
+    .auth-gate-promo h1 { font-size: 1rem; }
+    .auth-gate-form { padding: 25px; }
+    .auth-gate-brand { font-size: .65rem; }
+}
+
 /* ==================== VIDEO DE FONDO ==================== */
 #videoFondo {
     position: fixed;
@@ -93,6 +223,13 @@ header {
 .redes-header a:hover {
     color: #ffcc00;
 }
+.jugador-mini { display: flex; align-items: center; gap: 7px; margin-right: 8px; padding: 5px 9px; border: 1px solid rgba(255,204,0,.55); border-radius: 9px; background: rgba(255,255,255,.07); }
+.jugador-mini small, .jugador-mini strong { display: block; }
+.jugador-mini small { color: #ffcc00; font-size: .55rem; }
+.jugador-mini strong { color: #fff; font-size: .8rem; }
+.jugador-mini { border: 1px solid rgba(255,204,0,.55); cursor: pointer; color: #fff; }
+.mini-db { color: #7ee5a3; font-size: .68rem; white-space: nowrap; }
+.mini-avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #e52521; border: 1px solid #ffcc00; font-weight: 900; }
 
 /* ==================== MENÚ PESTAÑAS ==================== */
 .menu-pestañas {
@@ -149,6 +286,127 @@ header {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ==================== CUENTA, LOGROS Y MULTICLOUD ==================== */
+.oculto { display: none !important; }
+.cuenta-grid { display: grid; grid-template-columns: minmax(260px, .85fr) minmax(320px, 1.15fr); gap: 22px; max-width: 980px; margin: 0 auto; }
+.cuenta-card { background: linear-gradient(145deg, rgba(24,29,49,.94), rgba(10,13,25,.94)); border: 2px solid rgba(255,204,0,.28); border-radius: 18px; padding: 24px; box-shadow: 0 15px 35px rgba(0,0,0,.38); }
+.cuenta-hero { min-height: 315px; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(circle at 80% 15%, rgba(229,37,33,.45), transparent 35%), linear-gradient(145deg, #123d8c, #111527 65%); }
+.cuenta-card h3 { color: #ffcc00; margin: 10px 0; font-size: 1.25rem; }
+.cuenta-hero p { color: #e4e8f7; line-height: 1.5; font-size: 1.05rem; }
+.badge-mario { display: inline-block; width: fit-content; color: #161616; background: #ffcc00; border-radius: 99px; padding: 5px 10px; font: 700 .68rem 'Press Start 2P', cursive; }
+.monedas-decorativas { display: flex; gap: 18px; font-size: 2.4rem; margin-top: 28px; animation: flotarMonedas 2.5s ease-in-out infinite; }
+@keyframes flotarMonedas { 50% { transform: translateY(-9px); } }
+.cuenta-tabs { display: flex; gap: 6px; border-bottom: 1px solid rgba(255,255,255,.18); margin-bottom: 20px; }
+.cuenta-tab { color: #b8bfd8; background: transparent; border: 0; padding: 11px 8px; cursor: pointer; font: 700 .8rem 'Rajdhani', sans-serif; }
+.cuenta-tab.activa { color: #ffcc00; border-bottom: 3px solid #e52521; }
+.auth-form { display: grid; gap: 14px; }
+.auth-form label { display: grid; gap: 6px; color: #fff; font-weight: 700; }
+.auth-form input { width: 100%; color: #fff; background: rgba(0,0,0,.3); border: 1px solid #56617c; border-radius: 8px; padding: 12px; outline: none; }
+.auth-form input:focus { border-color: #ffcc00; box-shadow: 0 0 0 3px rgba(255,204,0,.15); }
+.auth-form small, .texto-ayuda { color: #aeb8d3; font-weight: 400; }
+.cuenta-alerta { max-width: 980px; margin: 0 auto 15px; min-height: 0; color: #fff; }
+.cuenta-alerta.ok, .cuenta-alerta.error { padding: 12px 16px; border-radius: 10px; }
+.cuenta-alerta.ok { background: rgba(42,177,91,.22); border: 1px solid #36d477; }
+.cuenta-alerta.error { background: rgba(229,37,33,.22); border: 1px solid #ff6e68; }
+.jugador-cabecera { max-width: 980px; margin: 0 auto 22px; display: flex; align-items: center; gap: 15px; }
+.jugador-cabecera > div:nth-child(2) { flex: 1; }
+.jugador-cabecera h3 { margin: 7px 0 2px; }
+.jugador-cabecera p { color: #b8bfd8; }
+.avatar-mario { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #e52521; border: 3px solid #ffcc00; font: 1.8rem 'Press Start 2P', cursive; color: #fff; text-shadow: 2px 2px #8c1010; }
+.btn-secundario { color: #fff; background: rgba(255,255,255,.08); border: 1px solid #74809d; border-radius: 8px; padding: 10px 13px; cursor: pointer; font-weight: 700; }
+.btn-secundario:hover { border-color: #ffcc00; color: #ffcc00; }
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 980px; margin: auto; }
+.perfil-datos { display: flex; align-items: center; gap: 14px; padding: 12px 0 18px; }
+.perfil-datos strong { display: block; color: #fff; font-size: 1.3rem; }
+.perfil-datos p { color: #b8bfd8; margin: 5px 0 9px; }
+.estadisticas-jugador { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.estadisticas-jugador div { padding: 10px 5px; text-align: center; border-radius: 9px; background: rgba(255,255,255,.06); }
+.estadisticas-jugador strong, .estadisticas-jugador small { display: block; }
+.estadisticas-jugador strong { color: #ffcc00; font-size: 1.25rem; }
+.estadisticas-jugador small { color: #aeb8d3; font-size: .72rem; }
+.avatar-selector { margin: 5px 0 15px; color: #ffcc00; }
+.avatar-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.avatar-options button, .avatar-upload { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #56617c; border-radius: 8px; color: #fff; background: rgba(255,255,255,.08); cursor: pointer; font-size: 1.25rem; }
+.avatar-options button:hover, .avatar-options button.selected, .avatar-upload:hover { border-color: #ffcc00; background: rgba(229,37,33,.35); }
+.avatar-upload input { display: none; }
+.xp-panel { margin-top: 15px; color: #fff; }
+.xp-panel > div { display: flex; justify-content: space-between; gap: 8px; font-size: .78rem; margin-bottom: 7px; }
+.xp-panel span { color: #aeb8d3; }
+.xp-bar, .xp-bar i { display: block; height: 8px; border-radius: 99px; }
+.xp-bar { overflow: hidden; background: #30384e; }
+.xp-bar i { width: 0; background: linear-gradient(90deg, #e52521, #ffcc00); transition: width .4s; }
+.cloud-live-card { min-height: 100%; }
+.cloud-live-engine { display: flex; align-items: center; gap: 12px; padding: 15px; margin-bottom: 14px; background: rgba(255,255,255,.06); border-radius: 10px; }
+.cloud-live-engine > span { font-size: 2rem; }
+.cloud-live-engine div { flex: 1; }
+.cloud-live-engine strong, .cloud-live-engine small { display: block; }
+.cloud-live-engine strong { color: #fff; }
+.cloud-live-engine small { color: #7ee5a3; margin-top: 4px; }
+.cloud-live-engine b { color: #6ee7ff; }
+.terminal-inline { margin-bottom: 14px; padding: 9px; border-radius: 7px; color: #7ee5a3; background: #080d13; font: .7rem monospace; }
+.achievement-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.achievement-filters button { border: 1px solid #56617c; border-radius: 99px; padding: 6px 10px; color: #b8bfd8; background: transparent; cursor: pointer; }
+.achievement-filters button.active, .achievement-filters button:hover { color: #111; border-color: #ffcc00; background: #ffcc00; }
+.auth-links { display: grid; gap: 8px; text-align: center; color: #aeb8d3; font-size: .8rem; }
+.auth-links button { padding: 0; border: 0; color: #ffcc00; background: transparent; cursor: pointer; font-weight: 700; }
+.remember-option { display: flex !important; grid-template-columns: auto 1fr; align-items: center; gap: 7px !important; font-size: .78rem; color: #aeb8d3 !important; }
+.remember-option input { width: auto; accent-color: #e52521; }
+.password-field { display: flex; }
+.password-field input { border-radius: 8px 0 0 8px; }
+.toggle-password { width: 48px; border: 1px solid #56617c; border-left: 0; border-radius: 0 8px 8px 0; color: #fff; background: #19213a; cursor: pointer; }
+.loading-screen { position: fixed; inset: 0; z-index: 4000; display: grid; place-items: center; align-content: center; gap: 12px; color: #fff; background: rgba(8,10,20,.9); }
+.loading-block { display: grid; place-items: center; width: 72px; height: 72px; border: 4px solid #9f7800; color: #fff; background: #ffcc00; font: 2.1rem 'Press Start 2P', cursive; animation: blockBounce 1s infinite; }
+.loading-mario { font-size: 2.2rem; animation: marioJump .7s infinite alternate; }
+@keyframes blockBounce { 50% { transform: translateY(-9px); } } @keyframes marioJump { to { transform: translateY(-20px); } }
+.arcade-terminal { position: fixed; z-index: 1150; bottom: 22px; left: 22px; width: 330px; color: #7ee5a3; background: rgba(5,10,14,.94); border: 1px solid #2c8352; border-radius: 8px; font: .72rem monospace; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+.arcade-terminal button { width: 100%; padding: 8px; border: 0; color: #ffcc00; background: transparent; text-align: left; cursor: pointer; font: inherit; }
+.arcade-terminal div { padding: 8px; border-top: 1px solid #234c37; line-height: 1.5; }
+.arcade-terminal.collapsed div { display: none; }
+@media (max-width: 760px) { .arcade-terminal { left: 10px; bottom: 10px; width: 260px; } .mini-db { display: none; } }
+.logros-panel { max-width: 980px; margin: 22px auto 0; }
+.logros-titulo { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.progreso-logros { color: #111; background: #ffcc00; border-radius: 99px; padding: 7px 11px; font-weight: 900; }
+.logro-item.locked { opacity: .58; filter: grayscale(.7); }
+.logro-progreso { display: block; height: 5px; margin-top: 7px; overflow: hidden; border-radius: 99px; background: #30384e; }
+.logro-progreso span { display: block; height: 100%; background: linear-gradient(90deg, #e52521, #ffcc00); }
+.actividad-reciente { display: grid; gap: 8px; }
+.actividad-item { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 8px; background: rgba(255,255,255,.05); }
+.actividad-item > span { font-size: 1.1rem; }
+.actividad-item strong, .actividad-item small { display: block; }
+.actividad-item strong { color: #fff; }
+.actividad-item small { color: #aeb8d3; margin-top: 3px; }
+.lista-logros { display: grid; gap: 10px; }
+.logro-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,.06); border-radius: 10px; }
+.logro-icono { font-size: 1.7rem; }
+.logro-item strong { display: block; color: #fff; }
+.logro-item small { color: #adb7d1; }
+.tabla-leaderboard { display: grid; gap: 7px; }
+.fila-ranking { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 8px; padding: 10px; background: rgba(255,255,255,.05); border-radius: 8px; }
+.fila-ranking:first-child { background: linear-gradient(90deg, rgba(255,204,0,.22), rgba(255,255,255,.05)); }
+.puesto-ranking { color: #ffcc00; font-weight: 700; }
+.puntos-ranking { color: #6ee7ff; font-weight: 700; }
+.selector-cloud { position: fixed; z-index: 1100; right: 22px; bottom: 22px; width: 285px; }
+.btn-cloud { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; color: #fff; background: linear-gradient(135deg, #173b91, #101526); border: 2px solid #ffcc00; border-radius: 13px; padding: 9px; cursor: pointer; box-shadow: 0 7px 24px rgba(0,0,0,.5); }
+.btn-cloud strong, .btn-cloud small { display: block; }
+.btn-cloud small { color: #9fadd3; margin-top: 2px; }
+.btn-cloud > span:nth-child(2) { flex: 1; }
+.bloque-pregunta { display: grid; place-items: center; width: 38px; height: 38px; color: #fff; background: #e52521; border: 2px solid #ffcc00; font: 1.3rem 'Press Start 2P', cursive; }
+.cloud-menu { position: absolute; right: 0; bottom: calc(100% + 10px); width: 100%; padding: 14px; background: #11182c; border: 1px solid #ffcc00; border-radius: 13px; box-shadow: 0 12px 35px rgba(0,0,0,.65); }
+.cloud-menu > p { color: #ffcc00; font-weight: 700; margin-bottom: 8px; }
+.cloud-option { display: flex; align-items: center; gap: 7px; padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,.08); cursor: pointer; font-size: .9rem; }
+.cloud-option span { flex: 1; }
+.cloud-option em { font-size: .7rem; color: #7ee5a3; font-style: normal; }
+.cloud-option input { accent-color: #e52521; }
+.cloud-menu .btn-secundario { margin-top: 12px; width: 100%; }
+.cloud-status { color: #aeb8d3; font-size: .78rem; margin-top: 8px; line-height: 1.4; }
+.notificacion-logro { position: fixed; z-index: 1200; top: 90px; right: 25px; display: flex; align-items: center; gap: 12px; max-width: 340px; padding: 13px 17px; background: linear-gradient(110deg, #25204b, #11182c); border: 2px solid #ffcc00; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,.55); transform: translateX(130%); transition: transform .35s ease; }
+.notificacion-logro.visible { transform: translateX(0); }
+.notificacion-icono { font-size: 2rem; }
+.notificacion-logro small, .notificacion-logro strong { display: block; }
+.notificacion-logro small { color: #ffcc00; font: .58rem 'Press Start 2P', cursive; }
+.notificacion-logro strong { margin-top: 5px; color: #fff; }
+@media (max-width: 760px) { .cuenta-grid, .dashboard-grid { grid-template-columns: 1fr; } .selector-cloud { right: 10px; bottom: 10px; width: min(285px, calc(100% - 20px)); } .jugador-cabecera { align-items: flex-start; flex-wrap: wrap; } .jugador-cabecera .btn-secundario { margin-left: auto; } }
 
 .titulo-seccion {
     font-family: 'Press Start 2P', cursive;
@@ -855,4 +1113,569 @@ footer {
 
 .contenedor-iframe-mapa:hover iframe {
     filter: invert(92%) hue-rotate(180deg) contrast(105%) saturate(130%);
+}
+
+.controles-ruta-mario {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 15px;
+}
+
+.subtitulo-radar {
+    margin: -8px 0 18px;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.subtitulo-radar i {
+    color: #ffcc00;
+    margin-right: 5px;
+}
+
+.radar-principal {
+    background: linear-gradient(145deg, rgba(20, 22, 35, 0.96), rgba(52, 13, 20, 0.92));
+}
+
+.leaflet-routing-container {
+    display: none !important;
+}
+
+.leaflet-control-zoom a {
+    color: #e60012 !important;
+    font-weight: bold;
+}
+
+.marcador-mario span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    color: #fff;
+    border: 3px solid #ffcc00;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.8);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+}
+
+.marcador-luigi span,
+.marcador-vehiculo span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    color: #fff;
+    background: #16823b;
+    border: 3px solid #ffcc00;
+    border-radius: 50%;
+    box-shadow: 0 0 14px rgba(22, 130, 59, 0.9);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+}
+
+.marcador-vehiculo span {
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    background: #e60012;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 1.15rem;
+    transform: scaleX(-1);
+    pointer-events: none;
+}
+
+.marcador-vehiculo i {
+    transform: scaleX(-1);
+}
+
+.controles-ruta-mario label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #ffcc00;
+    font-size: 0.82rem;
+    font-weight: bold;
+}
+
+.controles-ruta-mario input {
+    width: 100%;
+    padding: 11px 12px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 204, 0, 0.55);
+    border-radius: 8px;
+    font: inherit;
+}
+
+.controles-ruta-mario input:focus {
+    outline: 2px solid #e60012;
+    border-color: #ffcc00;
+}
+
+.acciones-ruta-mario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: -4px 0 15px;
+}
+
+.btn-ruta-secundario {
+    padding: 8px 12px;
+    color: #fff;
+    background: rgba(230, 0, 18, 0.25);
+    border: 1px solid rgba(255, 204, 0, 0.65);
+    border-radius: 7px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-ruta-secundario:hover {
+    background: #e60012;
+    transform: translateY(-1px);
+}
+
+.ayuda-ruta {
+    flex: 1 1 240px;
+    color: #bbb;
+    font-size: 0.78rem;
+}
+
+.ayuda-ruta i {
+    color: #ffcc00;
+}
+
+.contenedor-iframe-mapa #mapa-mario {
+    height: 470px;
+    width: 100%;
+    background: #182233;
+}
+
+.panel-ruta-mario {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 500;
+    width: min(290px, 32%);
+    max-height: 410px;
+    overflow-y: auto;
+    padding: 15px;
+    color: #eee;
+    background: rgba(12, 12, 20, 0.94);
+    border: 2px solid #ffcc00;
+    border-radius: 12px;
+    box-shadow: 0 0 18px rgba(230, 0, 18, 0.55);
+}
+
+.panel-ruta-titulo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 9px;
+    color: #ffcc00;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.72rem;
+}
+
+.panel-ruta-mario p {
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+#pasos-ruta {
+    padding-left: 21px;
+    color: #ccc;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+#pasos-ruta li {
+    margin-bottom: 7px;
+}
+
+.telemetria-ruta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.telemetria-ruta span {
+    flex: 1 1 150px;
+    padding: 9px 11px;
+    color: #ddd;
+    background: rgba(0, 0, 0, 0.45);
+    border-left: 3px solid #ffcc00;
+    border-radius: 5px;
+    font-size: 0.86rem;
+}
+
+.telemetria-ruta i {
+    color: #ffcc00;
+    margin-right: 4px;
+}
+
+.telemetria-ruta strong {
+    color: #fff;
+}
+
+.leyenda-ruta-mario {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 204, 0, 0.25);
+}
+
+.leyenda-ruta-mario > div {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    color: #bbb;
+    font-size: 0.76rem;
+}
+
+.leyenda-ruta-mario p {
+    line-height: 1.35;
+}
+
+.leyenda-ruta-mario strong {
+    color: #fff;
+}
+
+.leyenda-ruta-mario > div > i {
+    color: #ffcc00;
+    font-size: 1.2rem;
+}
+
+.leyenda-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    color: #fff;
+    border: 2px solid #ffcc00;
+    border-radius: 50%;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+}
+
+.leyenda-icono.salida {
+    background: #e60012;
+}
+
+.leyenda-icono.destino {
+    color: #111;
+    background: #ffcc00;
+}
+
+.tarjeta-sismos {
+    margin-top: 25px;
+    border: 2px solid #ffcc00 !important;
+    background: linear-gradient(145deg, rgba(22, 24, 36, 0.96), rgba(26, 13, 16, 0.94));
+    overflow: hidden;
+}
+
+.detector-titulo {
+    gap: 14px;
+}
+
+.radar-orbita {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    color: #111;
+    background: #ffcc00;
+    border: 3px solid #e60012;
+    border-radius: 50%;
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.8);
+}
+
+.radar-orbita span {
+    position: absolute;
+    width: 62px;
+    height: 62px;
+    border: 2px dashed rgba(255, 204, 0, 0.8);
+    border-radius: 50%;
+    animation: girarRadar 5s linear infinite;
+}
+
+.radar-orbita span::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 28px;
+    width: 7px;
+    height: 7px;
+    background: #e60012;
+    border-radius: 50%;
+}
+
+@keyframes girarRadar {
+    to { transform: rotate(360deg); }
+}
+
+.detector-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 4px 0 16px;
+    padding: 11px 15px;
+    background: linear-gradient(90deg, rgba(230, 0, 18, 0.28), rgba(255, 204, 0, 0.1), transparent);
+    border-left: 4px solid #e60012;
+    border-radius: 8px;
+}
+
+.detector-gif {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid #ffcc00;
+    border-radius: 50%;
+    animation: vigilarRadar 1.8s ease-in-out infinite;
+}
+
+.detector-gif img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes vigilarRadar {
+    50% { transform: scale(1.08); box-shadow: 0 0 15px #ffcc00; }
+}
+
+.detector-banner strong {
+    color: #ffcc00;
+}
+
+.detector-banner p {
+    margin-top: 3px;
+    color: #bbb;
+    font-size: 0.78rem;
+}
+
+.onda-sismica {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    color: #e60012;
+    font-size: 1.3rem;
+}
+
+.onda-sismica i:nth-child(1) { animation: onda 0.8s infinite alternate; }
+.onda-sismica i:nth-child(2) { animation: onda 0.8s 0.2s infinite alternate; }
+.onda-sismica i:nth-child(3) { animation: onda 0.8s 0.4s infinite alternate; }
+
+@keyframes onda {
+    to { transform: translateY(-6px); color: #ffcc00; }
+}
+
+.resumen-sismos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 4px 0 18px;
+}
+
+.resumen-sismos > div {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    padding: 11px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 204, 0, 0.35);
+    border-radius: 9px;
+}
+
+.resumen-sismos i {
+    grid-row: span 2;
+    color: #ffcc00;
+    font-size: 1.2rem;
+}
+
+.resumen-sismos strong {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.resumen-sismos small {
+    color: #aaa;
+    font-size: 0.68rem;
+}
+
+.sismos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.sismo-card {
+    position: relative;
+    padding: 14px;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(15, 17, 26, 0.96), rgba(41, 19, 23, 0.9));
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.sismo-icono-flotante {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: rgba(255, 204, 0, 0.45);
+    font-size: 1.35rem;
+    animation: pulsoSismo 1.8s ease-in-out infinite;
+}
+
+@keyframes pulsoSismo {
+    50% { transform: scale(1.18); color: #ffcc00; }
+}
+
+.sismo-card:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(70, 16, 24, 0.98), rgba(15, 17, 26, 0.98));
+    box-shadow: 0 0 14px rgba(255, 204, 0, 0.35);
+}
+
+.sismo-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.sismo-magnitud {
+    padding: 4px 8px;
+    color: #111;
+    border-radius: 15px;
+    font-size: 0.78rem;
+    font-weight: bold;
+}
+
+.sismo-hora {
+    color: #aaa;
+    font-size: 0.75rem;
+}
+
+.sismo-card::before {
+    content: '';
+    float: right;
+    color: rgba(255, 204, 0, 0.18);
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.sismo-magnitud i {
+    margin-right: 3px;
+}
+
+.sismo-lugar {
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.sismo-pie {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffcc00;
+    font-size: 0.76rem;
+}
+
+.estado-sismos {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.modal-sismo-mario {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.82);
+}
+
+.modal-sismo-mario.visible {
+    display: flex;
+}
+
+.modal-sismo-contenido {
+    position: relative;
+    width: min(500px, 100%);
+    padding: 24px;
+    color: #eee;
+    background: #151824;
+    border: 2px solid #e60012;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(230, 0, 18, 0.5);
+}
+
+.modal-sismo-contenido h3 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    color: #ffcc00;
+    border-bottom: 1px solid #e60012;
+}
+
+.modal-sismo-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    color: #fff;
+    background: transparent;
+    border: 0;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .controles-ruta-mario {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedor-iframe-mapa #mapa-mario {
+        height: 320px;
+    }
+
+    .panel-ruta-mario {
+        top: auto;
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+        width: auto;
+        max-height: 145px;
+    }
+
+    .leyenda-ruta-mario {
+        grid-template-columns: 1fr;
+    }
+
+    .resumen-sismos {
+        grid-template-columns: 1fr;
+    }
 }

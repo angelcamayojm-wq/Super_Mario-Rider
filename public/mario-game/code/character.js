@@ -656,6 +656,10 @@ Mario.Character.prototype.Get1Up = function() {
 
 Mario.Character.prototype.GetCoin = function() {
     this.Coins++;
+    if (window.MarioHubGame) {
+        window.MarioHubGame.coin(this.Coins);
+        window.MarioHubGame.score(this.Coins * 100);
+    }
     if (this.Coins === 100) {
         this.Coins = 0;
         this.Get1Up();

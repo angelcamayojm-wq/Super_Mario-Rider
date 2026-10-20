@@ -5,11 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario Bros Gaming Hub - SENA</title>
     <!-- Estilos CSS locales -->
-    <link rel="stylesheet" href="/css/estilos.css">
+    <link rel="stylesheet" href="/css/estilos.css?v=20261019-5">
     <!-- Iconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mapa interactivo y trazado de rutas -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
 </head>
-<body>
+<body class="app-bloqueada">
+    <section id="auth-gate" class="auth-gate" aria-label="Acceso al Gaming Hub">
+        <div class="auth-gate-card">
+            <div class="auth-gate-brand">
+                <img src="/img/logo-mario.jpg" alt="Super Mario">
+                <span>SUPER MARIO BROS HUB</span>
+            </div>
+            <div class="auth-gate-layout">
+                <div class="auth-gate-promo">
+                    <span class="badge-mario">PLAYER 1</span>
+                    <h1>¡Bienvenido al Reino Champiñón!</h1>
+                    <p>Inicia sesión para entrar al portal, guardar tus puntajes, desbloquear logros y usar tu radar.</p>
+                    <div class="monedas-decorativas"><span>🪙</span><span>⭐</span><span>🍄</span></div>
+                </div>
+                <div class="auth-gate-form">
+                    <p id="gate-message" class="gate-message" role="status"></p>
+                    <form id="gate-login-form" class="gate-form">
+                        <label>Usuario o correo<input name="identity" required autocomplete="username"></label>
+                        <label>Contraseña<div class="password-field"><input id="gate-login-password" name="password" type="password" required autocomplete="current-password"><button type="button" class="toggle-password" data-password-target="gate-login-password" aria-label="Mostrar contraseña">🍄</button></div></label>
+                        <label class="remember-option"><input name="remember" type="checkbox"> Recordarme en este dispositivo</label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-play"></i> Entrar al reino</button>
+                        <div class="auth-links"><button type="button" data-gate-view="forgot">¿Olvidaste tu contraseña?</button><span>¿No tienes una cuenta? <button type="button" data-gate-view="register">Regístrate aquí</button></span></div>
+                    </form>
+                    <form id="gate-register-form" class="gate-form oculto">
+                        <label>Nombre de jugador<input name="username" minlength="3" required autocomplete="username"></label>
+                        <label>Correo<input name="email" type="email" required autocomplete="email"></label>
+                        <label>Contraseña <small>(mínimo 8 caracteres)</small><input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-user-plus"></i> Crear jugador</button>
+                    </form>
+                    <form id="gate-forgot-form" class="gate-form oculto">
+                        <label>Correo registrado<input name="email" type="email" required autocomplete="email"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-envelope"></i> Enviar código</button>
+                        <p class="texto-ayuda">Después selecciona “Recuperar” nuevamente para ingresar el código.</p>
+                    </form>
+                    <form id="gate-reset-form" class="gate-form oculto">
+                        <label>Correo registrado<input name="email" type="email" required></label>
+                        <label>Código de 6 dígitos<input name="code" inputmode="numeric" pattern="[0-9]{6}" required></label>
+                        <label>Nueva contraseña<input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-key"></i> Cambiar contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Video de Fondo -->
     <video autoplay loop muted playsinline id="videoFondo">
@@ -36,6 +82,7 @@
             </figure>
             
             <aside class="redes-header">
+                <button id="jugador-mini" class="jugador-mini oculto" type="button" title="Abrir mi cuenta"><span class="mini-avatar">M</span><span><small>JUGADOR</small><strong id="jugador-mini-nombre">Mario</strong></span><span id="jugador-mini-db" class="mini-db">💾 Local</span></button>
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-twitch"></i></a>
                 <a href="#"><i class="fab fa-discord"></i></a>
@@ -47,8 +94,10 @@
             <button class="btn-tab activa" onclick="mostrarPestana('pestana-videos', this)"><i class="fas fa-video"></i> VIDEOS</button>
             <button class="btn-tab" onclick="mostrarPestana('pestana-musica', this)"><i class="fas fa-music"></i> MÚSICA</button>
             <button class="btn-tab" onclick="mostrarPestana('pestana-juego', this)"><i class="fas fa-gamepad"></i> JUGAR</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-radar', this)"><i class="fas fa-map-marked-alt"></i> RADAR</button>
             <button class="btn-tab" onclick="mostrarPestana('pestana-recursos', this)"><i class="fas fa-tools"></i> HERRAMIENTAS</button>
             <button class="btn-tab" onclick="mostrarPestana('pestana-clases', this)"><i class="fas fa-graduation-cap"></i> ACADEMIA</button>
+            <button class="btn-tab" onclick="mostrarPestana('pestana-cuenta', this)"><i class="fas fa-user-circle"></i> MI CUENTA</button>
         </nav>
     </header>
 
@@ -263,7 +312,76 @@
             </section>
         </section>
 
-       <!-- ==================== PESTAÑA 5: ACADEMIA / PERFIL Y MAPA ==================== -->
+       <!-- ==================== PESTAÑA 5: RADAR MARIO ==================== -->
+<section id="pestana-radar" class="contenido-tab">
+    <h2 class="titulo-seccion"><i class="fas fa-map-marked-alt"></i> Radar de Aventuras Mario</h2>
+    <p class="subtitulo-radar"><i class="fas fa-hand-pointer"></i> Selecciona la salida y el destino en el mapa, escribe una dirección o arrastra cualquiera de los marcadores.</p>
+
+    <article class="caja-multimedia tarjeta-efecto tarjeta-mapa-gamer radar-principal">
+        <header class="encabezado-mapa">
+            <div class="titulo-mapa-icono">
+                <i class="fas fa-compass icono-mapa-neon"></i>
+                <div>
+                    <h3>Mapa del Reino Champiñón</h3>
+                    <p class="subtexto-mapa">También puedes escribir las direcciones y pulsar “Trazar ruta”</p>
+                </div>
+            </div>
+            <span class="badge-ubicacion"><i class="fas fa-satellite-dish"></i> GPS activo</span>
+        </header>
+        <div class="controles-ruta-mario">
+            <label><span><i class="fas fa-flag"></i> Salida</span><input id="origen-input" type="text" value="Popayan, Cauca, Colombia" placeholder="Ciudad o dirección"></label>
+            <label><span><i class="fas fa-flag-checkered"></i> Destino</span><input id="destino-input" type="text" value="" placeholder="Escribe o selecciona el destino"></label>
+            <button id="btn-ruta" class="btn-rojo" type="button"><i class="fas fa-route"></i> Trazar ruta</button>
+        </div>
+        <div class="acciones-ruta-mario">
+            <button id="btn-ubicacion" class="btn-ruta-secundario" type="button"><i class="fas fa-location-crosshairs"></i> Usar mi ubicación como salida</button>
+            <button id="btn-intercambiar" class="btn-ruta-secundario" type="button"><i class="fas fa-right-left"></i> Intercambiar puntos</button>
+            <span id="ayuda-ruta" class="ayuda-ruta"><i class="fas fa-circle-info"></i> Haz clic en el mapa para elegir salida y destino.</span>
+        </div>
+        <figure class="contenedor-iframe-mapa">
+            <div id="mapa-mario" aria-label="Mapa interactivo para trazar una ruta"></div>
+            <aside class="panel-ruta-mario">
+                <div class="panel-ruta-titulo"><i class="fas fa-route"></i><span>Ruta de Mario</span></div>
+                <p id="resumen-ruta">Selecciona salida y destino para comenzar.</p>
+                <ol id="pasos-ruta"><li>La ruta aparecerá aquí.</li></ol>
+            </aside>
+        </figure>
+        <div class="telemetria-ruta" aria-live="polite">
+            <span><i class="fas fa-road"></i> Distancia: <strong id="stat-distancia">--</strong></span>
+            <span><i class="fas fa-clock"></i> Tiempo: <strong id="stat-tiempo">--</strong></span>
+            <span><i class="fas fa-circle-check"></i> Estado: <strong id="stat-estado">Listo para explorar</strong></span>
+            <span><i class="fas fa-location-dot"></i> Coordenadas: <strong id="stat-coordenadas">--</strong></span>
+        </div>
+        <div class="leyenda-ruta-mario">
+            <div><span class="leyenda-icono salida">M</span><p><strong>Salida</strong><br>Mario comienza aquí</p></div>
+            <div><span class="leyenda-icono destino">L</span><p><strong>Destino</strong><br>Luigi marca la llegada</p></div>
+            <div><i class="fas fa-arrows-up-down-left-right"></i><p><strong>Consejo</strong><br>Arrastra los iconos para ajustar la ruta</p></div>
+        </div>
+    </article>
+
+    <article class="caja-multimedia tarjeta-efecto tarjeta-sismos">
+        <header class="encabezado-mapa">
+            <div class="titulo-mapa-icono detector-titulo">
+                <div class="radar-orbita"><span></span><i class="fas fa-bolt"></i></div>
+                <div><h3>Detector de terremotos</h3><p class="subtexto-mapa">Radar sísmico del Reino Champiñón · USGS</p></div>
+            </div>
+            <span class="badge-ubicacion"><i class="fas fa-signal"></i> En vivo</span>
+        </header>
+        <div class="detector-banner">
+            <div class="detector-gif"><img src="/img/logo-mario.jpg" alt="Mario vigilando el radar"></div>
+            <div><strong>¡Alerta de movimiento!</strong><p>Mario monitorea las ondas sísmicas del planeta en tiempo real.</p></div>
+            <div class="onda-sismica"><i class="fas fa-wave-square"></i><i class="fas fa-wave-square"></i><i class="fas fa-wave-square"></i></div>
+        </div>
+        <div class="resumen-sismos">
+            <div><i class="fas fa-wave-square"></i><strong id="total-sismos">--</strong><small>eventos hoy</small></div>
+            <div><i class="fas fa-triangle-exclamation"></i><strong id="mayor-sismo">--</strong><small>mayor magnitud</small></div>
+            <div><i class="fas fa-clock"></i><strong id="actualizado-sismos">--</strong><small>última consulta</small></div>
+        </div>
+        <div id="sismos-grid" class="sismos-grid" aria-live="polite"><p class="estado-sismos"><i class="fas fa-spinner fa-spin"></i> Buscando señales sísmicas...</p></div>
+    </article>
+</section>
+
+       <!-- ==================== PESTAÑA 6: ACADEMIA / PERFIL ==================== -->
 <section id="pestana-clases" class="contenido-tab">
     <h2 class="titulo-seccion"><i class="fas fa-user-ninja"></i> Perfil del Creador & Ubicación</h2>
     
@@ -343,32 +461,114 @@
         </section>
     </article>
 
-    <!-- TARJETA 2: MAPA GAMER CON ICONO Y ESTILO NEÓN -->
-    <article class="caja-multimedia tarjeta-efecto tarjeta-mapa-gamer">
-        <header class="encabezado-mapa">
-            <div class="titulo-mapa-icono">
-                <i class="fas fa-map-marked-alt icono-mapa-neon"></i>
-                <div>
-                    <h3>Base de Operaciones / Ubicación</h3>
-                    <p class="subtexto-mapa">Mapa Interactivo GPS Gamer</p>
-                </div>
-            </div>
-            <span class="badge-ubicacion"><i class="fas fa-location-dot"></i> Popayán, Cauca - Colombia</span>
-        </header>
-
-        <figure class="contenedor-iframe-mapa">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3986.096894318717!2d-76.602283!3d2.441928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30030588625907%3A0x6b4be9bbef241772!2sPopay%C3%A1n%2C%20Cauca!5e0!2m3!1es!2sco!4v1710000000000!5m2!1es!2sco" 
-                width="100%" 
-                height="340" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy">
-            </iframe>
-        </figure>
-    </article>
-
 </section>
+
+        <!-- ==================== CUENTA, LOGROS Y MULTICLOUD ==================== -->
+        <section id="pestana-cuenta" class="contenido-tab">
+            <h2 class="titulo-seccion"><i class="fas fa-crown"></i> Centro de Jugador</h2>
+            <div id="cuenta-alerta" class="cuenta-alerta" role="status"></div>
+
+            <section id="panel-auth" class="cuenta-grid">
+                <article class="cuenta-card cuenta-hero">
+                    <span class="badge-mario">PLAYER 1</span>
+                    <h3>¡Entra al Reino Champiñón!</h3>
+                    <p>Guarda tus récords, desbloquea logros y lleva tu progreso contigo.</p>
+                    <div class="monedas-decorativas"><span>🪙</span><span>⭐</span><span>🍄</span></div>
+                </article>
+                <article class="cuenta-card">
+                    <div class="cuenta-tabs">
+                        <button class="cuenta-tab activa" type="button" data-auth-view="login">Iniciar sesión</button>
+                        <button class="cuenta-tab" type="button" data-auth-view="register">Crear cuenta</button>
+                        <button class="cuenta-tab" type="button" data-auth-view="forgot">Recuperar</button>
+                    </div>
+                    <form id="form-login" class="auth-form">
+                        <label>Usuario o correo<input name="identity" required autocomplete="username"></label>
+                        <label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-door-open"></i> Entrar al reino</button>
+                    </form>
+                    <form id="form-register" class="auth-form oculto">
+                        <label>Nombre de jugador<input name="username" minlength="3" required autocomplete="username"></label>
+                        <label>Correo<input name="email" type="email" required autocomplete="email"></label>
+                        <label>Contraseña <small>(mínimo 8 caracteres)</small><input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-user-plus"></i> Crear jugador</button>
+                    </form>
+                    <form id="form-forgot" class="auth-form oculto">
+                        <label>Correo registrado<input name="email" type="email" required autocomplete="email"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-envelope"></i> Enviar código</button>
+                        <p class="texto-ayuda">El código expira en 15 minutos. Revisa la consola solo en modo desarrollo local.</p>
+                    </form>
+                    <form id="form-reset" class="auth-form oculto">
+                        <label>Correo registrado<input name="email" type="email" required autocomplete="email"></label>
+                        <label>Código de 6 dígitos<input name="code" inputmode="numeric" pattern="[0-9]{6}" required></label>
+                        <label>Nueva contraseña<input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
+                        <button class="btn-rojo" type="submit"><i class="fas fa-key"></i> Cambiar contraseña</button>
+                    </form>
+                </article>
+            </section>
+
+            <section id="panel-jugador" class="oculto">
+                <div class="jugador-cabecera cuenta-card">
+                    <div class="avatar-mario">M</div>
+                    <div><span class="badge-mario">JUGADOR ACTIVO</span><h3 id="nombre-jugador">Jugador</h3><p id="correo-jugador"></p></div>
+                    <button id="btn-logout" class="btn-secundario" type="button"><i class="fas fa-sign-out-alt"></i> Salir</button>
+                </div>
+                <div class="dashboard-grid">
+                    <article class="cuenta-card">
+                        <h3><i class="fas fa-id-card"></i> Perfil del jugador</h3>
+                        <div class="perfil-datos"><div class="avatar-mario">M</div><div><strong id="perfil-nombre">Jugador</strong><p id="perfil-correo">correo</p><span class="badge-mario">PLAYER ACTIVO</span></div></div>
+                        <div class="avatar-selector"><strong>Avatar retro</strong><div class="avatar-options">
+                            <button type="button" data-avatar="mario">🍄</button><button type="button" data-avatar="luigi">🟢</button><button type="button" data-avatar="peach">👸</button><button type="button" data-avatar="bowser">🐢</button><button type="button" data-avatar="yoshi">🦖</button><button type="button" data-avatar="toad">🍄</button>
+                            <label class="avatar-upload">📷<input id="avatar-upload" type="file" accept="image/*"></label>
+                        </div></div>
+                        <div class="estadisticas-jugador"><div><strong id="stat-puntajes">0</strong><small>Partidas</small></div><div><strong id="stat-puntos">0</strong><small>Puntos</small></div><div><strong id="stat-logros">0/0</strong><small>Logros</small></div></div>
+                        <div class="xp-panel"><div><strong id="rango-jugador">Nivel 1 - Hongo Novato</strong><span id="xp-label">0 / 100 XP</span></div><span class="xp-bar"><i id="xp-progress"></i></span></div>
+                    </article>
+                    <article class="cuenta-card cloud-live-card"><h3><i class="fas fa-cloud"></i> Estado Multicloud</h3><div class="cloud-live-engine"><span id="perfil-cloud-icon">💾</span><div><strong id="perfil-cloud-name">Local seguro</strong><small id="perfil-cloud-state">🟢 Conectado y guardando</small></div><b id="perfil-cloud-latency">-- ms</b></div><div id="terminal-inline" class="terminal-inline">READY &gt; esperando operación...</div></article>
+                    <article class="cuenta-card">
+                        <h3><i class="fas fa-medal"></i> Salón de campeones</h3>
+                        <div id="tabla-leaderboard" class="tabla-leaderboard"></div>
+                    </article>
+                </div>
+                <article class="cuenta-card logros-panel">
+                    <div class="logros-titulo"><div><h3><i class="fas fa-trophy"></i> Colección de logros</h3><p class="texto-ayuda">Completa misiones para llenar tu álbum del Reino Champiñón.</p></div><span id="progreso-logros" class="progreso-logros">0%</span></div>
+                    <div class="achievement-filters"><button class="active" data-filter="all">Todos</button><button data-filter="games">🎮 Juegos</button><button data-filter="videos">🎬 Videos</button><button data-filter="music">🎵 Música</button><button data-filter="cloud">🗄️ Cloud</button></div>
+                    <div id="lista-logros" class="lista-logros"></div>
+                </article>
+                <article class="cuenta-card logros-panel">
+                    <div class="logros-titulo"><div><h3><i class="fas fa-history"></i> Actividad reciente</h3><p class="texto-ayuda">Tus últimas acciones en el portal.</p></div><button id="btn-export-data" class="btn-secundario" type="button"><i class="fas fa-download"></i> Exportar datos</button></div>
+                    <div id="actividad-reciente" class="actividad-reciente"></div>
+                </article>
+            </section>
+        </section>
+
+<div id="modal-sismo-mario" class="modal-sismo-mario" role="dialog" aria-modal="true" aria-labelledby="titulo-detalle-sismo">
+    <div class="modal-sismo-contenido">
+        <button id="cerrar-modal-sismo" class="modal-sismo-cerrar" type="button" aria-label="Cerrar detalle">&times;</button>
+        <h3 id="titulo-detalle-sismo"><i class="fas fa-bolt"></i> Ficha de energía sísmica</h3>
+        <div id="detalle-sismo-mario"></div>
+    </div>
+</div>
+
+        <aside id="selector-cloud" class="selector-cloud" aria-label="Selector de base de datos">
+            <button id="btn-cloud" class="btn-cloud" type="button"><span class="bloque-pregunta">?</span><span><strong>Motor activo</strong><small id="motor-activo">Local seguro</small></span><i class="fas fa-chevron-up"></i></button>
+            <div id="cloud-menu" class="cloud-menu oculto">
+                <p>Elige dónde consultar tu progreso</p>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="local" checked><span>💾 Local seguro</span><em>Disponible</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="postgres"><span>🐘 PostgreSQL / Neon</span><em>Configurable</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="mysql"><span>🐬 MySQL / Aiven</span><em>Configurable</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="mongodb"><span>🍃 MongoDB Atlas</span><em>Configurable</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="firebase"><span>🔥 Firebase</span><em>Configurable</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="turso"><span>🌙 Turso</span><em>Configurable</em></label>
+                <label class="cloud-option"><input type="radio" name="cloud-engine" value="cassandra"><span>☁️ Cassandra / Astra</span><em>Configurable</em></label>
+                <button id="btn-cloud-status" class="btn-secundario" type="button"><i class="fas fa-satellite-dish"></i> Comprobar conexiones</button>
+                <div id="cloud-status" class="cloud-status"></div>
+            </div>
+        </aside>
+        <div id="notificacion-logro" class="notificacion-logro" role="status">
+            <span class="notificacion-icono">🏆</span><div><small>LOGRO DESBLOQUEADO</small><strong id="notificacion-texto"></strong></div>
+        </div>
+        <div id="loading-screen" class="loading-screen oculto"><div class="loading-block">?</div><div class="loading-mario">🍄</div><strong id="loading-text">Cargando Reino...</strong></div>
+        <aside id="arcade-terminal" class="arcade-terminal collapsed"><button id="terminal-toggle" type="button">⌘ Terminal Arcade <span>⌃</span></button><div id="terminal-lines">READY &gt; Monitor de operaciones activo...</div></aside>
 
     <!-- FOOTER PERSONALIZADO -->
     <footer>
@@ -378,6 +578,18 @@
         </p>
     </footer>
 
-    <script src="/js/main.js"></script>
+    <script src="/js/main.js?v=20261019-5"></script>
+    <script>
+        document.addEventListener('play', function (event) {
+            if (event.target.matches('video')) window.MarioHub?.track('video_local', 'Video reproducido');
+            if (event.target.matches('audio')) window.MarioHub?.track('audio_local', 'Audio reproducido');
+        }, true);
+        document.addEventListener('click', function (event) {
+            if (event.target.closest('iframe')) window.MarioHub?.track('video_youtube', 'Contenido de YouTube abierto');
+        }, true);
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script src="/js/radar-mario.js"></script>
 </body>
 </html>

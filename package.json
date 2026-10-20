@@ -4,13 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "node --check server.js && node --check server/security.js && node --check server/json-store.js && node --check server/adapters.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1"
+    "@libsql/client": "^0.18.0",
+    "@upstash/redis": "^1.39.0",
+    "cassandra-driver": "^4.10.0",
+    "dotenv": "^18.0.8",
+    "express": "^5.2.1",
+    "firebase-admin": "^14.5.0",
+    "mongodb": "^7.7.0",
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.1.7",
+    "pg": "^8.23.1"
   }
 }
