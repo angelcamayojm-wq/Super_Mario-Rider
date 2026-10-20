@@ -72,7 +72,13 @@ function cargarPDF() {
             const loading = $('#loading-screen');
             if (loading) loading.classList.remove('oculto');
             const started = performance.now();
-            const headers = { 'Content-Type': 'application/json', 'X-Database-Engine': state.engine, ...(options.headers || {}) };
+            const sessionToken = localStorage.getItem('mario-session-token');
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Database-Engine': state.engine,
+                ...(sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {}),
+                ...(options.headers || {})
+            };
             try {
                 const response = await fetch(url, { credentials: 'include', ...options, headers });
                 const data = response.status === 204 ? null : await response.json();
@@ -84,6 +90,9 @@ function cargarPDF() {
             }
         };
         const formData = (form) => Object.fromEntries(new FormData(form).entries());
+        const saveSession = (result) => {
+            if (result?.sessionToken) localStorage.setItem('mario-session-token', result.sessionToken);
+        };
 
         function notifyAchievement(achievement) {
             if (!achievement) return;
@@ -249,6 +258,7 @@ function cargarPDF() {
             event.preventDefault();
             try {
                 const result = await api('/api/auth/login', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
+                saveSession(result);
                 unlockPortal(result.user);
                 notifyAchievement(result.achievement);
             } catch (error) { gateMessage(error.message); }
@@ -257,6 +267,7 @@ function cargarPDF() {
             event.preventDefault();
             try {
                 const result = await api('/api/auth/register', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
+                saveSession(result);
                 localStorage.removeItem('mario-audios');
                 localStorage.removeItem('mario-cloud-switches');
                 unlockPortal(result.user);
@@ -283,12 +294,12 @@ function cargarPDF() {
 
         $('#form-login')?.addEventListener('submit', async event => {
             event.preventDefault();
-            try { const result = await api('/api/auth/login', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) }); showPlayer(result.user); showMessage(`¡Bienvenido, ${result.user.username}!`); }
+            try { const result = await api('/api/auth/login', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) }); saveSession(result); showPlayer(result.user); showMessage(`¡Bienvenido, ${result.user.username}!`); }
             catch (error) { showMessage(error.message, 'error'); }
         });
         $('#form-register')?.addEventListener('submit', async event => {
             event.preventDefault();
-            try { const result = await api('/api/auth/register', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) }); showPlayer(result.user); notifyAchievement(result.achievement); showMessage('Cuenta creada. ¡Tu aventura comienza ahora!'); }
+            try { const result = await api('/api/auth/register', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) }); saveSession(result); showPlayer(result.user); notifyAchievement(result.achievement); showMessage('Cuenta creada. ¡Tu aventura comienza ahora!'); }
             catch (error) { showMessage(error.message, 'error'); }
         });
         $('#form-forgot')?.addEventListener('submit', async event => {
@@ -305,6 +316,7 @@ function cargarPDF() {
         $('#btn-logout')?.addEventListener('click', async () => {
             await api('/api/auth/logout', { method: 'POST' });
             state.user = null;
+            localStorage.removeItem('mario-session-token');
             localStorage.removeItem('mario-audios');
             localStorage.removeItem('mario-cloud-switches');
             document.body.classList.add('app-bloqueada');

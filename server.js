@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     const origin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Database-Engine');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Database-Engine, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     if (req.method === 'OPTIONS') return res.sendStatus(204);
     next();
@@ -33,6 +33,11 @@ function cookieValue(req, name) {
     const cookies = String(req.headers.cookie || '').split(';');
     const value = cookies.find(item => item.trim().startsWith(`${name}=`));
     return value ? decodeURIComponent(value.trim().slice(name.length + 1)) : null;
+}
+
+function bearerToken(req) {
+    const authorization = String(req.headers.authorization || '');
+    return authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : null;
 }
 
 async function repository(req) {
@@ -51,7 +56,7 @@ async function recoveryRepository(req) {
 }
 
 async function sessionUser(req) {
-    const token = cookieValue(req, 'mario_session');
+    const token = bearerToken(req) || cookieValue(req, 'mario_session');
     if (!token) return null;
     return (await repository(req)).findSession(token);
 }
@@ -132,7 +137,7 @@ app.post('/api/auth/register', async (req, res) => {
     const achievement = await award(req, user.id, '¡Bienvenido al Reino!', 'Inicia sesión en el Gaming Hub.');
     await recordActivity(req, user.id, 'cloud', 'Cuenta creada');
     res.setHeader('Set-Cookie', `mario_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000`);
-    res.status(201).json({ user: { id: user.id, username, email }, achievement });
+    res.status(201).json({ user: { id: user.id, username, email }, achievement, sessionToken: token });
 });
 
 app.post('/api/auth/login', async (req, res) => {
@@ -147,7 +152,7 @@ app.post('/api/auth/login', async (req, res) => {
     const achievement = await award(req, user.id, '¡Bienvenido al Reino!', 'Inicia sesión en el Gaming Hub.');
     await recordActivity(req, user.id, 'cloud', 'Inicio de sesión');
     res.setHeader('Set-Cookie', `mario_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000`);
-    res.json({ user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar || 'mario' }, achievement });
+    res.json({ user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar || 'mario' }, achievement, sessionToken: token });
 });
 
 app.post('/api/auth/logout', async (req, res) => {
@@ -181,7 +186,22 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         await transporter.sendMail({
             from: process.env.EMAIL_USER, to: user.email,
             subject: 'Código de recuperación - Mario Hub',
-            text: `Tu código de recuperación es: ${code}. Expira en 15 minutos.`
+            text: `Tu código de recuperación es: ${code}. Expira en 15 minutos.`,
+            html: `
+                <div style="margin:0;background:#071b4d;padding:32px 16px;font-family:Arial,sans-serif;color:#17213c">
+                    <div style="max-width:560px;margin:auto;background:#fff;border:5px solid #e52521;border-radius:18px;overflow:hidden">
+                        <div style="background:#e52521;color:#fff;padding:22px;text-align:center">
+                            <div style="font-size:42px">🍄 ⭐ 🪙</div>
+                            <h1 style="margin:8px 0 0;font-size:24px">Mario Gaming Hub</h1>
+                        </div>
+                        <div style="padding:28px;text-align:center">
+                            <h2 style="color:#0020c2;margin-top:0">¡Código de rescate!</h2>
+                            <p>Usa este código para recuperar tu acceso al Reino Champiñón:</p>
+                            <div style="display:inline-block;background:#fbd000;border:3px solid #17213c;border-radius:12px;padding:14px 24px;font-size:32px;font-weight:700;letter-spacing:8px">${code}</div>
+                            <p style="color:#666">Este código expira en 15 minutos. Si no solicitaste este cambio, ignora este mensaje.</p>
+                        </div>
+                    </div>
+                </div>`
         });
     } else {
         console.warn(`EMAIL_USER/EMAIL_PASS no configurados; código de desarrollo: ${code}`);
@@ -308,6 +328,19 @@ app.get('/api/cloud/status', async (req, res) => {
         }
     }
     res.json({ engines: result });
+});
+
+app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'Endpoint API no encontrado.' });
+});
+
+app.use((error, req, res, next) => {
+    console.error('Error de API:', error);
+    if (res.headersSent) return next(error);
+    if (req.path.startsWith('/api')) {
+        return res.status(error.statusCode || 500).json({ error: 'Error interno del servidor.' });
+    }
+    res.status(error.statusCode || 500).send('Error interno del servidor.');
 });
 
 // Servir archivos estáticos de la carpeta public
