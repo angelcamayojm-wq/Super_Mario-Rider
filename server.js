@@ -223,7 +223,7 @@ app.get('/api/scores', requireAuth, async (req, res) => {
 
 app.get('/api/leaderboard', async (req, res) => {
     const scores = await (await repository(req)).leaderboard();
-    res.json({ leaderboard: scores.map(item => ({ ...item, username: users[item.userId] || 'Jugador' })) });
+    res.json({ leaderboard: scores });
 });
 
 app.get('/api/achievements', requireAuth, async (req, res) => {

@@ -53,7 +53,7 @@ function cargarPDF() {
         const state = { user: null, engine: localStorage.getItem('mario-engine') || 'local' };
         let achievementItems = [];
         let cloudSwitches = Number(localStorage.getItem('mario-cloud-switches') || 0);
-        let gameScoreSubmitted = false;
+        let highestGameScoreSubmitted = 0;
         const engineNames = {
             local: 'Local seguro', postgres: 'PostgreSQL / Neon', mysql: 'MySQL / Aiven',
             mongodb: 'MongoDB Atlas', firebase: 'Firebase Firestore',
@@ -166,6 +166,13 @@ function cargarPDF() {
 
         async function loadDashboard() {
             const [achievements, leaderboard, profile] = await Promise.all([api('/api/achievements'), api('/api/leaderboard'), api('/api/profile')]);
+            state.user = { ...state.user, ...profile.user };
+            if ($('#nombre-jugador')) $('#nombre-jugador').textContent = profile.user.username;
+            if ($('#correo-jugador')) $('#correo-jugador').textContent = profile.user.email;
+            if ($('#perfil-nombre')) $('#perfil-nombre').textContent = profile.user.username;
+            if ($('#perfil-correo')) $('#perfil-correo').textContent = profile.user.email;
+            if ($('#jugador-mini-nombre')) $('#jugador-mini-nombre').textContent = profile.user.username;
+            updateCloudBadge();
             renderAchievements(achievements.catalog || [], achievements.stats);
             renderLeaderboard(leaderboard.leaderboard || []);
             renderActivity(profile.activities || []);
@@ -381,17 +388,18 @@ function cargarPDF() {
             const type = event.data.type;
             const payload = event.data.payload || {};
             if (type === 'game_started') {
-                gameScoreSubmitted = false;
+                highestGameScoreSubmitted = 0;
                 track('game_start', 'Partida iniciada');
             }
             if (type === 'coin_collected') track('coin_collected', `Moneda recogida: ${payload.coins || 0}`);
-            if (type === 'score_updated' && Number(payload.score) >= 1000 && !gameScoreSubmitted) {
-                gameScoreSubmitted = true;
+            if (type === 'score_updated' && Number(payload.score) > highestGameScoreSubmitted) {
+                const score = Number(payload.score);
+                highestGameScoreSubmitted = score;
                 api('/api/scores', {
                     method: 'POST',
-                    body: JSON.stringify({ gameTitle: 'Infinite Mario', score: Number(payload.score) })
+                    body: JSON.stringify({ gameTitle: 'Infinite Mario', score })
                 }).then(result => {
-                    logTerminal(`${state.engine.toUpperCase()}: SCORE STORED IN LOCAL FALLBACK (cloud CRUD unavailable)`);
+                    logTerminal(`[${state.engine.toUpperCase()}] SCORE INSERT SUCCESS (${result.persistence || state.engine})`);
                     if (result.achievement) notifyAchievement(result.achievement);
                     loadDashboard().catch(() => {});
                 }).catch(error => logTerminal(`SCORE WRITE ERROR: ${error.message}`));
