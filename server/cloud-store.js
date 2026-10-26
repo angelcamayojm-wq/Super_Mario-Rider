@@ -65,7 +65,18 @@ async function createSqlRepository(engine) {
     };
 }
 
-function mapUser(row) { return { id: row.id, username: row.username, email: row.email, passwordHash: row.password_hash, avatar: row.avatar || 'mario', createdAt: row.created_at }; }
+// 🔧 APLICADA CORRECCIÓN EN MAPUSER
+function mapUser(row) {
+    return {
+        id: row.id,
+        username: row.username,
+        email: row.email,
+        passwordHash: row.password_hash || row.passwordHash || row.password,
+        avatar: row.avatar || 'mario',
+        createdAt: row.created_at || row.createdAt
+    };
+}
+
 function mapScore(row) { return { id: row.id, userId: row.user_id, gameTitle: row.game_title, score: Number(row.score), timestamp: row.timestamp }; }
 function mapAchievement(row) { return { id: row.id, userId: row.user_id, achievementName: row.achievement_name, description: row.description, unlockedAt: row.unlocked_at }; }
 
@@ -158,6 +169,7 @@ async function createSqlRepositoryFromTurso(db) {
         async close(){}
     };
 }
+
 function localRepository() {
     const store = new JsonStore();
     return {
@@ -170,4 +182,5 @@ function localRepository() {
         insertActivity: async x=>store.insert('activity',x), activity: async u=>store.collection('activity').filter(x=>x.userId===u), close: async()=>{}
     };
 }
+
 module.exports = { createCloudRepository };
