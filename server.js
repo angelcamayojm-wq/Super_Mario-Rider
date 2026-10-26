@@ -3,13 +3,19 @@ const path = require('path');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { hashPassword, verifyPassword, createToken } = require('./server/security');
-const { createAdapters } = require('./server/adapters');
+const { createAdapters, ENGINE_ENV } = require('./server/adapters');
 const { createCloudRepository } = require('./server/cloud-store');
 
 try {
     if (process.loadEnvFile) process.loadEnvFile(path.join(__dirname, '.env'));
 } catch (error) {
     console.warn('No se pudo cargar .env:', error.message);
+}
+
+// Resolver DNS SRV en mongodb+srv://
+if (String(process.env.MONGO_URI || '').startsWith('mongodb+srv://')) {
+    try { require('dns').setServers(['1.1.1.1', '8.8.8.8']); }
+    catch (error) { console.warn('No se pudo ajustar el DNS:', error.message); }
 }
 
 const app = express();
@@ -40,10 +46,31 @@ function bearerToken(req) {
     return authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : null;
 }
 
+function publicError(statusCode, message) {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    error.expose = true;
+    return error;
+}
+
 async function repository(req) {
     const engine = String(req.headers['x-database-engine'] || 'local');
-    if (engine === 'redis') throw new Error('Redis está temporalmente deshabilitado hasta renovar sus credenciales de Upstash.');
-    if (!repositories.has(engine)) repositories.set(engine, createCloudRepository(engine));
+    if (engine === 'redis') throw publicError(503, 'Redis está temporalmente deshabilitado hasta renovar sus credenciales de Upstash.');
+    if (engine !== 'local') {
+        const adapter = adapters[engine];
+        if (!adapter) throw publicError(400, `Motor de datos desconocido: ${engine}.`);
+        if (!adapter.configured) {
+            throw publicError(503, `El motor "${adapter.name}" no está configurado en el servidor (revisa ${ENGINE_ENV[engine]}). Elige "Local seguro" en el menú de la nube o configura sus variables de entorno.`);
+        }
+    }
+    if (!repositories.has(engine)) {
+        const pending = Promise.resolve().then(() => createCloudRepository(engine)).catch(error => {
+            repositories.delete(engine);
+            console.error(`No se pudo abrir el motor ${engine}:`, error);
+            throw publicError(503, `No se pudo usar el motor "${engine}": ${String(error.message).slice(0, 200)}`);
+        });
+        repositories.set(engine, pending);
+    }
     return repositories.get(engine);
 }
 
@@ -133,7 +160,7 @@ app.post('/api/auth/register', async (req, res) => {
     };
     await repo.insertUser(user);
     const token = createToken();
-    await repo.insertSession({ token, userId: user.id, expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 30 });
+    await repo.insertSession({ token, userId: user.id, expiresAt: Date.now() + (1000 * 60 * 60 * 24 * 30) });
     const achievement = await award(req, user.id, '¡Bienvenido al Reino!', 'Inicia sesión en el Gaming Hub.');
     await recordActivity(req, user.id, 'cloud', 'Cuenta creada');
     res.setHeader('Set-Cookie', `mario_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000`);
@@ -148,7 +175,7 @@ app.post('/api/auth/login', async (req, res) => {
         return res.status(401).json({ error: 'Credenciales incorrectas.' });
     }
     const token = createToken();
-    await (await repository(req)).insertSession({ token, userId: user.id, expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 30 });
+    await (await repository(req)).insertSession({ token, userId: user.id, expiresAt: Date.now() + (1000 * 60 * 60 * 24 * 30) });
     const achievement = await award(req, user.id, '¡Bienvenido al Reino!', 'Inicia sesión en el Gaming Hub.');
     await recordActivity(req, user.id, 'cloud', 'Inicio de sesión');
     res.setHeader('Set-Cookie', `mario_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000`);
@@ -176,7 +203,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         userId: user.id,
         code,
-        expiresAt: Date.now() + 15 * 60 * 1000
+        expiresAt: Date.now() + (15 * 60 * 1000)
     });
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
         const transporter = nodemailer.createTransport({
@@ -338,12 +365,12 @@ app.use((error, req, res, next) => {
     console.error('Error de API:', error);
     if (res.headersSent) return next(error);
     if (req.path.startsWith('/api')) {
-        return res.status(error.statusCode || 500).json({ error: 'Error interno del servidor.' });
+        return res.status(error.statusCode || 500).json({ error: error.expose ? error.message : 'Error interno del servidor.' });
     }
     res.status(error.statusCode || 500).send('Error interno del servidor.');
 });
 
-// Servir archivos estáticos de la carpeta public
+// Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta principal

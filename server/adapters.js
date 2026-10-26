@@ -4,7 +4,6 @@ const { MongoClient } = require('mongodb');
 const admin = require('firebase-admin');
 const { Redis } = require('@upstash/redis');
 const { createClient: createTursoClient } = require('@libsql/client');
-const cassandra = require('cassandra-driver');
 const dns = require('dns').promises;
 
 const ENGINE_ENV = {
@@ -60,9 +59,11 @@ function createAdapters() {
             try {
                 return await connect();
             } catch (error) {
-                if (error.code !== 'ECONNREFUSED' || !String(error.message).includes('querySrv')) throw error;
-                dns.setServers(['1.1.1.1', '8.8.8.8']);
-                return connect();
+                if (String(error.message).includes('querySrv') || error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+                    dns.setServers(['1.1.1.1', '8.8.8.8']);
+                    return await connect();
+                }
+                throw error;
             }
         }
     };
