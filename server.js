@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { hashPassword, verifyPassword, createToken } = require('./server/security');
-const { createAdapters, ENGINE_ENV } = require('./server/adapters');
+const { createAdapters, syncUserAllDatabases, ENGINE_ENV } = require('./server/adapters');
 const { createCloudRepository } = require('./server/cloud-store');
 
 try {
@@ -158,7 +158,17 @@ app.post('/api/auth/register', async (req, res) => {
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         username, email, passwordHash: hashPassword(password), avatar: 'mario', createdAt: new Date().toISOString()
     };
+
+    // 1. Guardar en el motor seleccionado en la petición
     await repo.insertUser(user);
+
+    // 2. Sincronización automática Multicloud en todas las DBs activas
+    try {
+        await syncUserAllDatabases({ ...user, password: user.passwordHash });
+    } catch (e) {
+        console.warn('Sincronización multicloud parcial:', e.message);
+    }
+
     const token = createToken();
     await repo.insertSession({ token, userId: user.id, expiresAt: Date.now() + (1000 * 60 * 60 * 24 * 30) });
     const achievement = await award(req, user.id, '¡Bienvenido al Reino!', 'Inicia sesión en el Gaming Hub.');

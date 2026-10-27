@@ -5,13 +5,59 @@ const { Redis } = require('@upstash/redis');
 const { createClient: createTursoClient } = require('@libsql/client');
 const JsonStore = require('./json-store');
 
+// Esquema SQL con Relaciones mediante Claves Foráneas (FOREIGN KEY)
 const schema = `
-CREATE TABLE IF NOT EXISTS mario_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, avatar TEXT, created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS mario_sessions (token TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at BIGINT NOT NULL);
-CREATE TABLE IF NOT EXISTS mario_scores (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, game_title TEXT NOT NULL, score REAL NOT NULL, timestamp TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS mario_achievements (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, achievement_name TEXT NOT NULL, description TEXT NOT NULL, unlocked_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS mario_activity (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, type TEXT NOT NULL, label TEXT NOT NULL, metadata TEXT NOT NULL, created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS mario_reset_codes (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, code TEXT NOT NULL, expires_at BIGINT NOT NULL);
+CREATE TABLE IF NOT EXISTS mario_users (
+    id TEXT PRIMARY KEY, 
+    username TEXT NOT NULL, 
+    email TEXT NOT NULL UNIQUE, 
+    password_hash TEXT NOT NULL, 
+    avatar TEXT, 
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS mario_sessions (
+    token TEXT PRIMARY KEY, 
+    user_id TEXT NOT NULL, 
+    expires_at BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES mario_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mario_scores (
+    id TEXT PRIMARY KEY, 
+    user_id TEXT NOT NULL, 
+    game_title TEXT NOT NULL, 
+    score REAL NOT NULL, 
+    timestamp TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES mario_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mario_achievements (
+    id TEXT PRIMARY KEY, 
+    user_id TEXT NOT NULL, 
+    achievement_name TEXT NOT NULL, 
+    description TEXT NOT NULL, 
+    unlocked_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES mario_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mario_activity (
+    id TEXT PRIMARY KEY, 
+    user_id TEXT NOT NULL, 
+    type TEXT NOT NULL, 
+    label TEXT NOT NULL, 
+    metadata TEXT NOT NULL, 
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES mario_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mario_reset_codes (
+    id TEXT PRIMARY KEY, 
+    user_id TEXT NOT NULL, 
+    code TEXT NOT NULL, 
+    expires_at BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES mario_users(id) ON DELETE CASCADE
+);
 `;
 
 function id() { return `${Date.now()}-${Math.random().toString(16).slice(2)}`; }
@@ -40,7 +86,6 @@ async function createSqlRepository(engine) {
     const close = async () => isMySql ? db.end() : db.end();
     return {
         async findUser(identity) {
-            // CORREGIDO: Se agregaron los marcadores $1, $2, $3 para PostgreSQL
             const sql = isMySql
                 ? 'SELECT * FROM mario_users WHERE id=? OR LOWER(email)=LOWER(?) OR LOWER(username)=LOWER(?) LIMIT 1'
                 : 'SELECT * FROM mario_users WHERE id=$1 OR LOWER(email)=LOWER($2) OR LOWER(username)=LOWER($3) LIMIT 1';
@@ -165,7 +210,7 @@ async function createSqlRepositoryFromTurso(db) {
         async insertAchievement(x){await query('INSERT INTO mario_achievements VALUES (?,?,?,?,?)',[x.id,x.userId,x.achievementName,x.description,x.unlockedAt]);return x;},
         async achievements(u){return (await query('SELECT * FROM mario_achievements WHERE user_id=? ORDER BY unlocked_at DESC',[u])).map(mapAchievement);},
         async insertActivity(x){await query('INSERT INTO mario_activity VALUES (?,?,?,?,?,?)',[x.id,x.userId,x.type,x.label,json(x.metadata),x.createdAt]);return x;},
-        async activity(u){return (await query('SELECT * FROM mario_activity WHERE user_id=? ORDER BY created_at DESC LIMIT 30',[u])).map(x=>({id:x.id,userId:x.user_id,type:x.type,label:x.label,metadata:parse(x.metadata,{}),createdAt:x.created_at}));},
+        async activity(u){return (await query('SELECT * FROM mario_activity WHERE user_id=? ORDER BY created_at DESC LIMIT 30',[u])).map(x=>({id:x.id,userId:x.user_id,type:x.type,label:x.label,metadata:parse(x.metadata,{}),createdAt:x.createdAt}));},
         async close(){}
     };
 }
