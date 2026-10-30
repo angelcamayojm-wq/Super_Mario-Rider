@@ -1,7 +1,6 @@
 const { Pool } = require('pg');
 const mysql = require('mysql2/promise');
 const { MongoClient } = require('mongodb');
-const admin = require('firebase-admin');
 const { Redis } = require('@upstash/redis');
 const { createClient: createTursoClient } = require('@libsql/client');
 const dns = require('dns').promises;
@@ -10,7 +9,6 @@ const ENGINE_ENV = {
     postgres: 'POSTGRES_URL',
     mysql: 'MYSQL_URL',
     mongodb: 'MONGO_URI',
-    firebase: 'FIREBASE_SERVICE_ACCOUNT_KEY',
     redis: 'UPSTASH_REDIS_REST_URL',
     turso: 'TURSO_DATABASE_URL',
     cassandra: 'ASTRA_DB_TOKEN'
@@ -159,43 +157,7 @@ function createAdapters() {
         }
     };
 
-    // ==================== 4. FIREBASE FIRESTORE ====================
-    adapters.firebase = {
-        name: 'Firebase Firestore',
-        configured: configured('firebase'),
-        async ping() {
-            const credentialPath = require('path').resolve(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || '');
-            const fs = require('fs');
-            if (!fs.existsSync(credentialPath)) {
-                throw new Error('No se encontró FIREBASE_SERVICE_ACCOUNT_KEY en la ruta configurada.');
-            }
-            if (!admin.apps.length) {
-                const serviceAccount = require(credentialPath);
-                admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-            }
-            await admin.firestore().listCollections();
-            return true;
-        },
-        async saveUser(user) {
-            const credentialPath = require('path').resolve(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || '');
-            if (!admin.apps.length) {
-                const serviceAccount = require(credentialPath);
-                admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-            }
-            const db = admin.firestore();
-            await db.collection('mario_users').doc(user.email).set({
-                id: user.id || String(Date.now()),
-                username: user.username,
-                email: user.email,
-                passwordHash: user.passwordHash || user.password,
-                avatar: user.avatar || 'mario',
-                createdAt: user.createdAt || new Date().toISOString(),
-                updatedAt: new Date()
-            }, { merge: true });
-        }
-    };
-
-    // ==================== 5. REDIS / UPSTASH ====================
+    // ==================== 4. REDIS / UPSTASH ====================
     adapters.redis = {
         name: 'Redis / Upstash',
         configured: configured('redis') && Boolean(process.env.UPSTASH_REDIS_REST_TOKEN),
@@ -215,7 +177,7 @@ function createAdapters() {
         }
     };
 
-    // ==================== 6. TURSO SQLITE ====================
+    // ==================== 5. TURSO SQLITE ====================
     adapters.turso = {
         name: 'SQLite Cloud / Turso',
         configured: configured('turso') && Boolean(process.env.TURSO_AUTH_TOKEN),
@@ -258,7 +220,7 @@ function createAdapters() {
         }
     };
 
-    // ==================== 7. CASSANDRA / ASTRA DB ====================
+    // ==================== 6. CASSANDRA / ASTRA DB ====================
     adapters.cassandra = {
         name: 'Cassandra / Astra DB',
         configured: configured('cassandra') && Boolean(process.env.ASTRA_DB_CLIENT_ID),

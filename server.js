@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
@@ -6,10 +7,11 @@ const { hashPassword, verifyPassword, createToken } = require('./server/security
 const { createAdapters, syncUserAllDatabases, ENGINE_ENV } = require('./server/adapters');
 const { createCloudRepository } = require('./server/cloud-store');
 
+// Cargar .env de forma segura
 try {
     if (process.loadEnvFile) process.loadEnvFile(path.join(__dirname, '.env'));
 } catch (error) {
-    console.warn('No se pudo cargar .env:', error.message);
+    console.warn('Cargado .env mediante fallback:', error.message);
 }
 
 // Resolver DNS SRV en mongodb+srv://
@@ -22,7 +24,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const adapters = createAdapters();
 const repositories = new Map();
-const cloudRecoveryEngines = new Set(['postgres', 'mysql', 'mongodb', 'turso']);
 
 app.use(express.json({ limit: '1mb' }));
 app.use((req, res, next) => {
@@ -75,11 +76,7 @@ async function repository(req) {
 }
 
 async function recoveryRepository(req) {
-    const requested = String(req.headers['x-database-engine'] || 'postgres');
-    if (!cloudRecoveryEngines.has(requested)) {
-        throw new Error('La recuperación de contraseña requiere PostgreSQL, MySQL, MongoDB o Turso.');
-    }
-    return repository({ ...req, headers: { ...req.headers, 'x-database-engine': requested } });
+    return repository(req);
 }
 
 async function sessionUser(req) {
@@ -122,7 +119,7 @@ const achievementCatalog = [
     { id: 'student', category: 'academy', name: 'Estudiante Estrella', description: 'Visita la Academia.', icon: '🎓' },
     { id: 'technician', category: 'tools', name: 'Técnico SENA', description: 'Usa una herramienta del Hub.', icon: '🛠️' },
     { id: 'multicloud', category: 'cloud', name: 'Viajero Multicloud', description: 'Cambia de motor de datos tres veces.', icon: '☁️' },
-    { id: 'cloud-master', category: 'cloud', name: 'Maestro Cloud', description: 'Guarda datos en los siete motores.', icon: '🌐' }
+    { id: 'cloud-master', category: 'cloud', name: 'Maestro Cloud', description: 'Guarda datos en los seis motores.', icon: '🌐' }
 ];
 
 async function recordActivity(req, userId, type, label, metadata = {}) {

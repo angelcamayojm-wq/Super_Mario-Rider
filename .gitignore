@@ -3,12 +3,11 @@ node_modules/
 .env.*
 !.env.example
 
-# Firebase and cloud service credentials
+# Cloud service credentials
 *.json
 *.pem
 *.key
 *service-account*.json
-firebase-adminsdk-*.json
 
 # Local databases, logs, and IDE files
 data/

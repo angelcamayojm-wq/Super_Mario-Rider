@@ -75,13 +75,16 @@ function updateAvatarDisplayName(avatarKey) {
    CUENTA DEL JUGADOR, LOGROS Y SELECTOR MULTICLOUD
    ======================================================================== */
 (function inicializarCuenta() {
-    const state = { user: null, engine: localStorage.getItem('mario-engine') || 'local' };
+    const availableEngines = new Set(['local', 'postgres', 'mysql', 'mongodb', 'turso', 'cassandra']);
+    const storedEngine = localStorage.getItem('mario-engine');
+    const state = { user: null, engine: availableEngines.has(storedEngine) ? storedEngine : 'local' };
+    if (state.engine === 'local' && storedEngine !== 'local') localStorage.setItem('mario-engine', 'local');
     let achievementItems = [];
     let cloudSwitches = Number(localStorage.getItem('mario-cloud-switches') || 0);
     let highestGameScoreSubmitted = 0;
     const engineNames = {
         local: 'Local seguro', postgres: 'PostgreSQL / Neon', mysql: 'MySQL / Aiven',
-        mongodb: 'MongoDB Atlas', firebase: 'Firebase Firestore',
+        mongodb: 'MongoDB Atlas',
         turso: 'SQLite Cloud / Turso', cassandra: 'Cassandra / Astra DB'
     };
 
@@ -245,7 +248,7 @@ function updateAvatarDisplayName(avatarKey) {
     }
 
     function updateCloudBadge() {
-        const icons = { local: '💾', postgres: '🐘', mysql: '🐬', mongodb: '🍃', firebase: '🔥', turso: '📜', cassandra: '☁️' };
+        const icons = { local: '💾', postgres: '🐘', mysql: '🐬', mongodb: '🍃', turso: '📜', cassandra: '☁️' };
         const badge = `${icons[state.engine] || '💾'} ${engineNames[state.engine]}`;
         if ($('#jugador-mini-db')) $('#jugador-mini-db').textContent = badge;
         if ($('#perfil-cloud-icon')) $('#perfil-cloud-icon').textContent = icons[state.engine] || '💾';
